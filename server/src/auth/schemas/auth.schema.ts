@@ -1,7 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import {JwtModule} from '@nestjs/jwt'
 
-export type UserDocument = HydratedDocument<User>;
+export type UserDocument = HydratedDocument<User> & {
+  generateAccessToken(password: string): Promise<string>;
+  generateRefreshToken(password: string): Promise<string>;
+  isPasswordCorrect(password: string) : Promise<boolean>;
+};
 
 @Schema()
 export class User {
@@ -13,6 +18,30 @@ export class User {
  
   @Prop()
   password!: string;
+
+  @Prop({ type: String, default: null })
+  refreshToken?: string | null;
 }
 
+
 export const userSchema = SchemaFactory.createForClass(User);
+
+// NO NEED OF THESE METHODS I JUST SIMPLY MAKE THEM INSIDE OF SERVICES
+
+// userSchema.methods.generateAccessToken = async function (password:string) {
+//   JwtModule.register({
+//     secret: process.env.ACCESS_TOKEN_SECRET,
+//     signOptions: {
+//       expiresIn: '1h'
+//     }
+//   })
+// }
+
+// userSchema.methods.generateRefreshToken = async function  (password:string) {
+//   JwtModule.register({
+//     secret: process.env.REFRESH_TOKEN_SECRET,
+//     signOptions: {
+//       expiresIn: '7d'
+//     }
+//   })
+// }
