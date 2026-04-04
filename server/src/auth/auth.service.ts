@@ -1,5 +1,5 @@
 import {
-  ConflictException,
+    ConflictException,
     HttpStatus,
     Injectable,
     InternalServerErrorException,
@@ -107,7 +107,7 @@ export class AuthService {
         const refreshToken = await this.generateRefreshToken(data.username);
 
         if (!accessToken || !refreshToken) {
-          throw new InternalServerErrorException({
+            throw new InternalServerErrorException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
                 success: false,
                 error: 'Something went wrong.',
@@ -118,5 +118,16 @@ export class AuthService {
             refreshToken,
             username: user.username,
         };
+    } 
+
+    async uniqueUsername({username}: {username: string}) {
+        const user = await this.userModel.findOne({ username: username });
+
+        console.log("user: ", user)
+        if (!user) {
+            return false; 
+        }
+
+        return true;
     }
 }
