@@ -10,7 +10,7 @@ export class AuthService {
     constructor (@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
     async registerUser (data: RegisterUserDto) {
-        console.log("data: ", data)
+        console.log('data :>> ', data.paraphrase, data.password, data.username);
         const newUser = await this.userModel.create({
             paraphrase: data.paraphrase,
             username: data.username,
