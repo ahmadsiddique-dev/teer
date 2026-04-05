@@ -2,7 +2,7 @@
     cursor: url("cursor.png") 4 4, auto;
 }
 
-button, a:hover {
+button, input, a:hover {
   cursor: url("pointer.png") 4 4, auto;
 }
 

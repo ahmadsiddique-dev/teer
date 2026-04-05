@@ -7,6 +7,7 @@ import { RouterProvider } from "react-router/dom";
 import Signin from './pages/Signin.tsx';
 import "./custom.css"
 import Register from './pages/Register.tsx';
+import Chat from './pages/Chat.tsx';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />
+  },
+  {
+    path: "/chat",
+    element: <Chat />
   }
 ]);
 

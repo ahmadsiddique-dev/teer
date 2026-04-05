@@ -13,7 +13,7 @@ const Register = () => {
                 <h2 className="text-center bg-rose-500 mt-2.5">
                     The Anonymous Chat App
                 </h2>
-            </div>
+            </div> 
             <div className='my-10'>
               <Card>
                 <CardHeader className='text-center text-lg font-light'>
@@ -32,7 +32,7 @@ const Register = () => {
                     Paraphrase*
                   </Label>
                   <Input type='text' placeholder='We just need it!' name='paraphrase'/>
-                  <Button type='submit' className='max-w-50 my-5'>
+                  <Button type='submit' className='max-w-50 bg-rose-500 my-5'>
                     Submit
                   </Button>
                 </CardContent>
