@@ -60,8 +60,8 @@ const Chat = () => {
                 />
             )}
 
-            <div className="col-span-12 border-l md:col-span-9 lg:col-span-9 grid grid-rows-12">
-                <header className="row-span-1 bg-rose-900 flex items-center px-4 gap-2">
+            <div className="col-span-12 border-l md:col-span-9 lg:col-span-9 grid grid-rows-12 h-screen">
+                <header className="row-span-1 bg-rose-900 flex items-center px-4 gap-2 min-h-0">
                     <Button
                         className="md:hidden bg-white px-2 py-1 rounded"
                         onClick={() => setOpen(true)}
@@ -73,30 +73,30 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black text-sm retro">
+                        <p className="text-black text-sm retro truncate">
                             Ahmad Siddique Shikrani Baloch
                         </p>
                     </div>
                 </header>
 
-                <main className="row-span-9 overflow-y-auto p-4 flex flex-col gap-2">
-                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs">
+                <main className="row-span-9 overflow-y-auto p-4 flex flex-col gap-2 min-h-0">
+                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs break-words whitespace-pre-wrap">
                         Hello Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere sapiente unde eum eos voluptas repudiandae, distinctio vero autem modi sunt ullam maxime delectus.,  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni cupiditate, eligendi alias perspiciatis, sint eveniet expedita, commodi vel incidunt quisquam reprehe
                     </div>
-                    <div className="self-end bg-white px-3 py-2 rounded max-w-xs">
+                    <div className="self-end bg-white px-3 py-2 rounded max-w-xs break-words whitespace-pre-wrap">
                         Hi!
                     </div>
-                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs">
+                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs break-words whitespace-pre-wrap">
                         Hello Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere sapiente unde eum eos voluptas repudiandae, distinctio vero autem modi sunt ullam maxime delectus.,  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni cupiditate, eligendi alias perspiciatis, sint eveniet expedita, commodi vel incidunt quisquam reprehe
                     </div>
                 </main>
 
-                <footer className="row-span-2 flex justify-center gap-4 items-center px-3 ">
+                <footer className="row-span-2 relative flex justify-center gap-4 items-center px-3 min-h-0">
                     <Textarea
                         placeholder="Type a message..."
                         className="flex-1 resize-none px-3 text-white py-2 rounded outline-none pr-30"
                     />
-                    <Button className="px-4 py-2 absolute right-10  text-black bg-white rounded">
+                    <Button className="px-4 py-2 absolute right-10 text-black bg-white rounded">
                         Send
                     </Button>
                 </footer>
