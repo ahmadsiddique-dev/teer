@@ -5,7 +5,6 @@ import {
 } from '@/components/ui/8bit/avatar';
 import { Button } from '@/components/ui/8bit/button';
 import { Card } from '@/components/ui/8bit/card';
-import { Input } from '@/components/ui/8bit/input';
 import { Textarea } from '@/components/ui/8bit/textarea';
 import { useState } from 'react';
 
@@ -79,19 +78,31 @@ const Chat = () => {
                     </div>
                 </header>
 
-                <main className="row-span-9 overflow-y-auto p-4 flex flex-col gap-2 min-h-0">
-                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs break-words whitespace-pre-wrap">
-                        Hello Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere sapiente unde eum eos voluptas repudiandae, distinctio vero autem modi sunt ullam maxime delectus.,  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni cupiditate, eligendi alias perspiciatis, sint eveniet expedita, commodi vel incidunt quisquam reprehe
+                <main className="row-span-9 no-scrollbar overflow-y-auto p-4 flex flex-col gap-2 min-h-0">
+                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
+                        Hello Lorem ipsum dolor sit amet consectetur adipisicing
+                        elit. Facere sapiente unde eum eos voluptas repudiandae,
+                        distinctio vero autem modi sunt ullam maxime delectus.,
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Magni cupiditate, eligendi alias perspiciatis,
+                        sint eveniet expedita, commodi vel incidunt quisquam
+                        reprehe
                     </div>
-                    <div className="self-end bg-white px-3 py-2 rounded max-w-xs break-words whitespace-pre-wrap">
+                    <div className="self-end bg-white px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
                         Hi!
                     </div>
-                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs break-words whitespace-pre-wrap">
-                        Hello Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere sapiente unde eum eos voluptas repudiandae, distinctio vero autem modi sunt ullam maxime delectus.,  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni cupiditate, eligendi alias perspiciatis, sint eveniet expedita, commodi vel incidunt quisquam reprehe
+                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
+                        Hello Lorem ipsum dolor sit amet consectetur adipisicing
+                        elit. Facere sapiente unde eum eos voluptas repudiandae,
+                        distinctio vero autem modi sunt ullam maxime delectus.,
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Magni cupiditate, eligendi alias perspiciatis,
+                        sint eveniet expedita, commodi vel incidunt quisquam
+                        reprehe
                     </div>
                 </main>
 
-                <footer className="row-span-2 relative flex justify-center gap-4 items-center px-3 min-h-0">
+                <footer className="row-span-2 border-t relative flex justify-center gap-4 items-center px-3 min-h-0">
                     <Textarea
                         placeholder="Type a message..."
                         className="flex-1 resize-none px-3 text-white py-2 rounded outline-none pr-30"
