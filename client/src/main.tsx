@@ -6,6 +6,7 @@ import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import Signin from './pages/Signin.tsx';
 import "./custom.css"
+import Register from './pages/Register.tsx';
 
 const router = createBrowserRouter([
   {
@@ -18,14 +19,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: ""
+    element: <Register />
   }
 ]);
 
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <div className='bg-[#c2410c] min-h-screen min-w-full'>
+        <div className='bg-[#222a24] min-h-screen min-w-full'>
             <RouterProvider router={router} />
         </div>
     </StrictMode>,

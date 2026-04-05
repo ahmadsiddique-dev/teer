@@ -2,6 +2,10 @@
     cursor: url("cursor.png") 4 4, auto;
 }
 
+button, a:hover {
+  cursor: url("pointer.png") 4 4, auto;
+}
+
 .retro {
   font-family: "Press Start 2P", system-ui;
   font-weight: 400;
