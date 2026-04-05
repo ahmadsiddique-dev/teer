@@ -1,12 +1,10 @@
-import React from 'react'
 
 const App = () => {
-  return (
-    <div>
-      I am here
-
-    </div>
-  )
-}
+    return (
+        <div>
+            Hey ther here is app page
+        </div>
+    );
+};
 
 export default App;
