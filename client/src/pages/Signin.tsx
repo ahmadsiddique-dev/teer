@@ -1,4 +1,6 @@
 import { Button } from '@/components/ui/8bit/button';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
     Card,
     CardHeader,
@@ -8,7 +10,21 @@ import {
 import { Input } from '@/components/ui/8bit/input';
 import { Label } from '@/components/ui/8bit/label';
 
+type Inputs = {
+    username: string;
+    password: string;
+};
+
 const Signin = () => {
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<Inputs>();
+
+    const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+    console.log(watch('username'));
     return (
         <main className="max-w-2xl dark retro py-12 mx-auto">
             <div>
@@ -24,22 +40,68 @@ const Signin = () => {
                     <CardHeader className="text-center text-lg font-light">
                         SignIn now!
                     </CardHeader>
-                    <CardContent className="flex flex-col gap-3 mx-6 my-6">
-                        <Label htmlFor="username">Username*</Label>
-                        <Input
-                            type="text"
-                            placeholder="Your username"
-                            name="username"
-                        />
-                        <Label htmlFor="password">Password*</Label>
-                        <Input
-                            type="password"
-                            placeholder="Enter your insecure password!"
-                            name="password"
-                        />
-                        <Button type="submit" className="max-w-50 bg-rose-500 my-5">
-                            Submit
-                        </Button>
+                    <CardContent className=" mx-6 my-6">
+                        <form
+                            className="flex flex-col gap-3"
+                            onSubmit={handleSubmit(onSubmit)}
+                        >
+                            <Label htmlFor="username">Username*</Label>
+                            <Input
+                                {...register('username', {
+                                    required: {
+                                        value: true,
+                                        message: 'Username is required',
+                                    },
+                                    minLength: {
+                                        value: 2,
+                                        message: 'Too short username',
+                                    },
+                                    maxLength: {
+                                        value: 200,
+                                        message:
+                                            'Username must be less than 200 characters',
+                                    },
+                                })}
+                                autoComplete="username"
+                                type="text"
+                                placeholder="Your username"
+                                id="username"
+                            />
+                            <span className="text-[8px] text-red-500">
+                                {errors.username?.message}
+                            </span>
+                            <Label htmlFor="password">Password*</Label>
+                            <Input
+                                {...register('password', {
+                                    required: {
+                                        value: true,
+                                        message: 'Password is required field',
+                                    },
+                                    minLength: {
+                                        value: 4,
+                                        message: 'Too short password',
+                                    },
+                                    maxLength: {
+                                        value: 200,
+                                        message:
+                                            'Password must be less than 200 characters',
+                                    },
+                                })}
+                                type="password"
+                                autoComplete="current-password"
+                                placeholder="Enter your insecure password!"
+                                id="password"
+                            />
+                            <span className="text-[8px] text-red-500">
+                                {errors.password?.message}
+                            </span>
+                            <Button
+                                type="submit"
+                                className="max-w-50 bg-rose-500 my-5"
+                            >
+                                Submit
+                            </Button>
+                        </form>
                     </CardContent>
                     <CardFooter className="text-center">
                         Make an account? &ensp;

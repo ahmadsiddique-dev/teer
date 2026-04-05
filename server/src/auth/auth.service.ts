@@ -121,13 +121,13 @@ export class AuthService {
     } 
 
     async uniqueUsername({username}: {username: string}) {
-        const user = await this.userModel.findOne({ username: username });
+        const user = await this.userModel.findOne({username});
 
         console.log("user: ", user)
         if (!user) {
-            return false; 
+            return true; 
         }
 
-        return true;
+        return false;
     }
 }
