@@ -2,7 +2,7 @@
     cursor: url("cursor.png") 4 4, auto;
 }
 
-button, input, a:hover {
+button, .point-me, input, a:hover {
   cursor: url("pointer.png") 4 4, auto;
 }
 
@@ -16,3 +16,20 @@ body {
   background: black;
 }
 
+.h-10 {
+  margin-top: 9px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for IE/Edge legacy */
+.no-scrollbar {
+  -ms-overflow-style: none;
+}
