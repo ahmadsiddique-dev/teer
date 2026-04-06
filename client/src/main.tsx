@@ -8,6 +8,7 @@ import Signin from './pages/Signin.tsx';
 import "./custom.css"
 import Register from './pages/Register.tsx';
 import Chat from './pages/Chat.tsx';
+import { Toaster } from "@/components/ui/sonner"
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <div className='bg-[#222a24] min-h-screen min-w-full'>
             <RouterProvider router={router} />
+            <Toaster />
         </div>
     </StrictMode>,
 );

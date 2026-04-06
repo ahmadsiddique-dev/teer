@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/8bit/card';
 import { Input } from '@/components/ui/8bit/input';
 import { Label } from '@/components/ui/8bit/label';
+import { Link } from 'react-router';
 
 export type Inputs = {
     username: string;
@@ -26,7 +27,7 @@ const Signin = () => {
     const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
     console.log(watch('username'));
     return (
-        <main className="max-w-2xl dark retro py-12 mx-auto">
+        <main className="max-w-2xl overflow-x-hidden  dark retro py-12 mx-auto">
             <div>
                 <h1 className="text-[#22c55e] text-center font-bold text-2xl tracking-tight">
                     <strong>TEER</strong>
@@ -105,12 +106,12 @@ const Signin = () => {
                     </CardContent>
                     <CardFooter className="text-center">
                         Make an account? &ensp;
-                        <a
+                        <Link
                             className="underline-offset-4 underline"
-                            href="/register"
+                            to="/register"
                         >
                             Signin
-                        </a>
+                        </Link>
                     </CardFooter>
                 </Card>
             </div>

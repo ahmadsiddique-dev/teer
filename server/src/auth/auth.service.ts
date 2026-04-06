@@ -121,7 +121,7 @@ export class AuthService {
     } 
 
     async uniqueUsername({username}: {username: string}) {
-        const user = await this.userModel.findOne({username});
+        const user = await this.userModel.findOne({username}, {_id: 1});
 
         console.log("user: ", user)
         if (!user) {

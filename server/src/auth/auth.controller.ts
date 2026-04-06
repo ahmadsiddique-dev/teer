@@ -72,6 +72,7 @@ export class AuthController {
 
     @Post('check-unique')
     async checkUniqueUsername(@Body() {username}: { username: string}): Promise<boolean> {
+        console.log("BROOM: ", username)
         return this.authService.uniqueUsername({username})
     }
 }
