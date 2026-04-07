@@ -1,3 +1,4 @@
+import SettingDialog from '@/components/elements/SettingDialog';
 import {
     Avatar,
     AvatarFallback,
@@ -31,7 +32,7 @@ const Chat = () => {
                     </Button>
                 </div>
 
-                <p className="retro text-center text-2xl font-extrabold tracking-tight mb-3 mt-0 text-primary">
+                <p className="retro text-center text-2xl text-green-700 font-extrabold tracking-tight mb-3 mt-0 ">
                     Teer
                 </p>
 
@@ -168,12 +169,7 @@ const Chat = () => {
                     </Card>
                 </div>
                 <div className="h-20 w-full ">
-                    <Card className="w-full flex-row items-center px-1.5 flex">
-                        <span><img className=' setting active:rotate-90 duration-200' src="/setting.png" alt="setting-icon" /></span> 
-                        <p className="font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
+                    <SettingDialog />
                 </div>
             </aside>
 
@@ -197,7 +193,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black text-sm retro truncate">
+                        <p className="text-secondary text-[8px] font-bold sm:font-normal  sm:text-sm retro truncate">
                             Ahmad Siddique Shikrani Baloch
                         </p>
                     </div>
@@ -225,12 +221,30 @@ const Chat = () => {
                         sint eveniet expedita, commodi vel incidunt quisquam
                         reprehe
                     </div>
+                    <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
+                        Hello Lorem ipsum dolor sit amet consectetur adipisicing
+                        elit. Facere sapiente unde eum eos voluptas repudiandae,
+                        distinctio vero autem modi sunt ullam maxime delectus.,
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Magni cupiditate, eligendi alias perspiciatis,
+                        sint eveniet expedita, commodi vel incidunt quisquam
+                        reprehe
+                    </div>
+                    <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
+                        Hello Lorem ipsum dolor sit amet consectetur adipisicing
+                        elit. Facere sapiente unde eum eos voluptas repudiandae,
+                        distinctio vero autem modi sunt ullam maxime delectus.,
+                        Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Magni cupiditate, eligendi alias perspiciatis,
+                        sint eveniet expedita, commodi vel incidunt quisquam
+                        reprehe
+                    </div>
                 </main>
 
                 <footer className="shrink-0 border-t flex flex-row justify-center gap-4 items-center px-3 py-3 min-h-[60px]">
                     <Textarea
                         placeholder="Type a message..."
-                        className="flex-1 resize-none px-3 py-2 rounded outline-none"
+                        className="flex-1 text-[8px] sm:text-sm resize-none max-h-[30vh] no-scrollbar px-3 py-2 text-secondary rounded outline-none"
                     />
                     <Button className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded shrink-0">
                         Send

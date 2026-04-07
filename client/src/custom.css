@@ -8,12 +8,14 @@ button, .point-me, input, a:hover {
 
 .retro {
   font-family: "Press Start 2P", system-ui;
+  /* font-size: small; */
   font-weight: 400;
+  /* letter-spacing: -1px; */
   font-style: normal;
 }
 
 .setting {
-  image-rendering: pixelated;
+  image-rendering: pixelated; 
 }
 
 body {
