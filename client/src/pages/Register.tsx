@@ -68,10 +68,10 @@ const Register = () => {
     return (
         <main className="max-w-2xl max-h-screen overflow-y-hidden overflow-x-hidden dark retro py-12 mx-auto">
             <div>
-                <h1 className="text-[#22c55e] text-center font-bold text-2xl tracking-tight">
+                <h1 className="text-primary text-center font-bold text-2xl tracking-tight">
                     <strong>TEER</strong>
                 </h1>
-                <h2 className="text-center bg-rose-500 mt-2.5">
+                <h2 className="text-center bg-secondary text-secondary-foreground px-2 py-1 mt-2.5">
                     The Anonymous Chat App
                 </h2>
             </div>
@@ -98,8 +98,8 @@ const Register = () => {
                                             <span
                                                 className={
                                                     data?.data
-                                                        ? 'text-green-500'
-                                                        : 'text-red-500'
+                                                        ? 'text-primary'
+                                                        : 'text-destructive'
                                                 }
                                             >
                                                 {data?.data
@@ -117,7 +117,7 @@ const Register = () => {
                                 placeholder="Choose a unique username"
                                 id="username"
                             />
-                            <span className="text-[8px] text-red-500">
+                            <span className="text-[8px] text-destructive">
                                 {errors.username?.message}
                             </span>
                             <Label htmlFor="password">Password*</Label>
@@ -128,7 +128,7 @@ const Register = () => {
                                 placeholder="Don't make a crackable password"
                                 id="password"
                             />
-                            <span className="text-[8px] text-red-500">
+                            <span className="text-[8px] text-destructive">
                                 {errors.password?.message}
                             </span>
                             <Label htmlFor="paraphrase">Paraphrase*</Label>
@@ -138,13 +138,13 @@ const Register = () => {
                                 placeholder="We just need it!"
                                 id="paraphrase"
                             />
-                            <span className="text-[8px] text-red-500">
+                            <span className="text-[8px] text-destructive">
                                 {errors.paraphrase?.message}
                             </span>
                             <Button
                                 disabled={registerLoading}
                                 type="submit"
-                                className="max-w-50 bg-rose-500 my-5"
+                                className="max-w-50 bg-primary hover:bg-primary/90 text-primary-foreground my-5"
                             >
                                 {registerLoading && <Spinner />}Submit
                             </Button>

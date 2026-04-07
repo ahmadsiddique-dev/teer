@@ -45,10 +45,10 @@ const Signin = () => {
     return (
         <main className="max-w-2xl overflow-x-hidden  dark retro py-12 mx-auto">
             <div>
-                <h1 className="text-[#22c55e] text-center font-bold text-2xl tracking-tight">
+                <h1 className="text-primary text-center font-bold text-2xl tracking-tight">
                     <strong>TEER</strong>
                 </h1>
-                <h2 className="text-center bg-rose-500 mt-2.5">
+                <h2 className="text-center bg-secondary text-secondary-foreground px-2 py-1 mt-2.5">
                     The Anonymous Chat App
                 </h2>
             </div>
@@ -84,7 +84,7 @@ const Signin = () => {
                                 placeholder="Your username"
                                 id="username"
                             />
-                            <span className="text-[8px] text-red-500">
+                            <span className="text-[8px] text-destructive">
                                 {errors.username?.message}
                             </span>
                             <Label htmlFor="password">Password*</Label>
@@ -109,13 +109,13 @@ const Signin = () => {
                                 placeholder="Enter your insecure password!"
                                 id="password"
                             />
-                            <span className="text-[8px] text-red-500">
+                            <span className="text-[8px] text-destructive">
                                 {errors.password?.message}
                             </span>
                             <Button
                             disabled={SiginLoading}
                                 type="submit"
-                                className="max-w-50 bg-rose-500 my-5"
+                                className="max-w-50 bg-primary text-primary-foreground hover:bg-primary/90 my-5"
                             >
                                 {SiginLoading && <Spinner variant='diamond' />}Submit
                             </Button>

@@ -32,7 +32,7 @@ const Chat = () => {
                     </Button>
                 </div>
 
-                <p className="retro text-center text-2xl text-green-700 font-extrabold tracking-tight mb-3 mt-0 ">
+                <p className="retro text-center text-2xl text-primary font-extrabold tracking-tight mb-3 mt-0 ">
                     Teer
                 </p>
 
@@ -46,7 +46,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -55,7 +55,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -64,7 +64,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -73,7 +73,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -82,7 +82,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -91,7 +91,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -100,7 +100,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -109,7 +109,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -118,7 +118,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -127,7 +127,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -136,7 +136,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -145,7 +145,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
@@ -154,7 +154,7 @@ const Chat = () => {
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black font-bold text-[8px]">
+                        <p className="text-primary font-bold text-[8px]">
                             Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
