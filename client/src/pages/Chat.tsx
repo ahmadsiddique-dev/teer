@@ -11,15 +11,15 @@ import { useState } from 'react';
 const Chat = () => {
     const [open, setOpen] = useState(false);
     return (
-        <div className="grid grid-cols-12 w-full h-screen overflow-hidden">
+        <div className="grid grid-cols-12 w-full h-dvh overflow-hidden">
             <aside
                 className={`
-        fixed md:static top-0 left-0 min-h-full z-50
+        fixed md:static bg-primary top-0 left-0 h-full overflow-hidden z-50
         col-span-12 md:col-span-3 lg:col-span-3
         flex flex-col
-        w-[75%] md:w-auto
+        w-[80%] md:w-auto
         transform transition-transform duration-300
-        ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}   
     `}
             >
                 <div className="text-end px-3.5 py-0.5">
@@ -31,15 +31,15 @@ const Chat = () => {
                     </Button>
                 </div>
 
-                <p className="retro text-center text-2xl font-extrabold tracking-tight mb-3 mt-0 text-green-500">
+                <p className="retro text-center text-2xl font-extrabold tracking-tight mb-3 mt-0 text-primary">
                     Teer
                 </p>
 
-                <Button className="mx-4 h-11 text-black bg-rose-500">
+                <Button className="mx-4 h-11 bg-primary text-primary-foreground hover:bg-primary/90">
                     Chats
                 </Button>
 
-                <div className="flex-1 no-scrollbar overflow-y-auto w-full px-5 my-4">
+                <div className="flex-1 min-h-0 no-scrollbar overflow-y-auto w-full px-5 my-4"> 
                     <Card className="w-full flex-row items-center px-1.5 flex ">
                         <Avatar>
                             <AvatarImage src="/image.png" />
@@ -184,10 +184,10 @@ const Chat = () => {
                 />
             )}
 
-            <div className="col-span-12 border-l md:col-span-9 lg:col-span-9 grid grid-rows-12 h-screen">
-                <header className="row-span-1  flex items-center px-4 gap-2 min-h-0">
+            <div className="col-span-12 border-l md:col-span-9 lg:col-span-9 flex flex-col h-dvh max-w-full">
+                <header className="shrink-0 flex items-center px-4 py-3 gap-2 min-h-0 border-b">
                     <Button
-                        className="md:hidden bg-white px-2 py-1 rounded"
+                        className="md:hidden bg-secondary text-secondary-foreground hover:bg-secondary/80 px-2 py-1 rounded"
                         onClick={() => setOpen(true)}
                     >
                         C
@@ -203,8 +203,8 @@ const Chat = () => {
                     </div>
                 </header>
 
-                <main className="row-span-9 no-scrollbar overflow-y-auto p-4 flex flex-col gap-2 min-h-0">
-                    <div className="self-start retro text-sm  bg-accent-foreground px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
+                <main className="flex-1 no-scrollbar overflow-y-auto overflow-x-hidden p-4 flex flex-col gap-2 min-h-0">
+                    <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
                         Hello Lorem ipsum dolor sit amet consectetur adipisicing
                         elit. Facere sapiente unde eum eos voluptas repudiandae,
                         distinctio vero autem modi sunt ullam maxime delectus.,
@@ -213,10 +213,10 @@ const Chat = () => {
                         sint eveniet expedita, commodi vel incidunt quisquam
                         reprehe
                     </div>
-                    <div className="self-end bg-white px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
+                    <div className="self-end retro text-[8px] md:text-sm bg-primary text-primary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
                         Hi!
                     </div>
-                    <div className="self-start retro text-sm bg-accent-foreground px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
+                    <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
                         Hello Lorem ipsum dolor sit amet consectetur adipisicing
                         elit. Facere sapiente unde eum eos voluptas repudiandae,
                         distinctio vero autem modi sunt ullam maxime delectus.,
@@ -227,12 +227,12 @@ const Chat = () => {
                     </div>
                 </main>
 
-                <footer className="row-span-2 border-t relative flex justify-center gap-4 items-center px-3 min-h-0">
+                <footer className="shrink-0 border-t flex flex-row justify-center gap-4 items-center px-3 py-3 min-h-[60px]">
                     <Textarea
                         placeholder="Type a message..."
-                        className="flex-1 resize-none px-3  py-2 rounded outline-none pr-30"
+                        className="flex-1 resize-none px-3 py-2 rounded outline-none"
                     />
-                    <Button className="px-4 py-2 absolute right-10 text-black bg-white rounded">
+                    <Button className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded shrink-0">
                         Send
                     </Button>
                 </footer>
