@@ -16,7 +16,7 @@ export class RegisterUserDto {
 export class LoginUserDto {
     @IsString()
     @IsNotEmpty()
-    username!: string;
+    username!: string; 
 
     @IsString()
     @IsNotEmpty()

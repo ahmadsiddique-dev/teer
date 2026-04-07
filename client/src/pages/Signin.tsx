@@ -10,6 +10,9 @@ import {
 import { Input } from '@/components/ui/8bit/input';
 import { Label } from '@/components/ui/8bit/label';
 import { Link } from 'react-router';
+import useApi from '@/hooks/apiClient';
+import axios from 'axios';
+import { Spinner } from '@/components/ui/8bit/spinner';
 
 export type Inputs = {
     username: string;
@@ -20,12 +23,25 @@ const Signin = () => {
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm<Inputs>();
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
-    console.log(watch('username'));
+    const onSubmit: SubmitHandler<Inputs> = (data) =>  SigninExecute(data);
+
+    const {
+        data: SigninData,
+        loading: SiginLoading,
+        error: SigninError,
+        execute: SigninExecute,
+    } = useApi((data) =>
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, data, {
+            withCredentials: true,
+        }),
+    );
+
+    console.log("SiginData: ", SigninData)
+
+    console.log("SigininError: ", SigninError)
     return (
         <main className="max-w-2xl overflow-x-hidden  dark retro py-12 mx-auto">
             <div>
@@ -97,10 +113,11 @@ const Signin = () => {
                                 {errors.password?.message}
                             </span>
                             <Button
+                            disabled={SiginLoading}
                                 type="submit"
                                 className="max-w-50 bg-rose-500 my-5"
                             >
-                                Submit
+                                {SiginLoading && <Spinner variant='diamond' />}Submit
                             </Button>
                         </form>
                     </CardContent>
@@ -110,7 +127,7 @@ const Signin = () => {
                             className="underline-offset-4 underline"
                             to="/register"
                         >
-                            Signin
+                             Signin
                         </Link>
                     </CardFooter>
                 </Card>

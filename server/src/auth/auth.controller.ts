@@ -37,7 +37,7 @@ export class AuthController {
     async signInUser(
         @Body() registerUserDto: LoginUserDto,
         @Res({ passthrough: true }) res: express.Response,
-    ): Promise<ILogin> {
+    ): Promise<any> {
         const { accessToken, refreshToken, username } =
             await this.authService.signInUser(registerUserDto);
 
@@ -72,7 +72,6 @@ export class AuthController {
 
     @Post('check-unique')
     async checkUniqueUsername(@Body() {username}: { username: string}): Promise<boolean> {
-        console.log("BROOM: ", username)
         return this.authService.uniqueUsername({username})
     }
 }

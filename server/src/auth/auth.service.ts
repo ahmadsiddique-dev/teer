@@ -84,6 +84,7 @@ export class AuthService {
 
     async signInUser(data: RegisterUserDto) {
         const { username, password } = data;
+        console.log("BData: ", username, password)
 
         let user = await this.userModel.findOne({ username });
 

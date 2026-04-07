@@ -18,12 +18,11 @@ import { useEffect, useState } from 'react';
 import useApi from '@/hooks/apiClient';
 import axios from 'axios';
 import { Link } from 'react-router';
-import { toast } from '@/components/ui/8bit/toast'
+import { toast } from '@/components/ui/8bit/toast';
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const debounced = useDebounceCallback(setUsername, 400);
-    const [registerDataState, setRegisterDataState] = useState<RegisterInputs>();
 
     type RegisterInputs = Inputs & {
         paraphrase: string;
@@ -36,19 +35,25 @@ const Register = () => {
         watch,
     } = useForm<RegisterInputs>({ resolver: zodResolver(RegisterSchema) });
     const onSubmit: SubmitHandler<RegisterInputs> = (data) => {
-        setRegisterDataState(data)
-        registerExecute()
+        registerExecute(data);
     };
-    
-    const {data: registerData, error: registerError, execute: registerExecute, loading: registerLoading} = useApi(() => (
-            axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, registerDataState)
-        ))
+
+    const {
+        data: registerData,
+        error: registerError,
+        execute: registerExecute,
+        loading: registerLoading,
+    } = useApi((payload) =>
+        axios.post(
+            `${import.meta.env.VITE_BACKEND_URL}/auth/register`, payload, {withCredentials: true}
+        ),
+    );
 
     console.log('registerError :>> ', registerError);
-    console.log("RegsiterData: ", registerData)
+    console.log('RegsiterData: ', registerData);
     debounced(watch('username'));
     if (registerError) {
-        toast(registerError)
+        toast(registerError);
     }
     const { data, loading, execute } = useApi(() =>
         axios.post<boolean>(
@@ -61,7 +66,7 @@ const Register = () => {
         execute();
     }, [username]);
     return (
-        <main className="max-w-2xl overflow-x-hidden dark retro py-12 mx-auto">
+        <main className="max-w-2xl max-h-screen overflow-y-hidden overflow-x-hidden dark retro py-12 mx-auto">
             <div>
                 <h1 className="text-[#22c55e] text-center font-bold text-2xl tracking-tight">
                     <strong>TEER</strong>
