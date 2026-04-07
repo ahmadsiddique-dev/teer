@@ -12,6 +12,10 @@ button, .point-me, input, a:hover {
   font-style: normal;
 }
 
+.setting {
+  image-rendering: pixelated;
+}
+
 body {
   background: black;
 }
@@ -24,12 +28,10 @@ body {
   display: none;
 }
 
-/* Hide scrollbar for Firefox */
 .no-scrollbar {
   scrollbar-width: none;
 }
 
-/* Hide scrollbar for IE/Edge legacy */
 .no-scrollbar {
   -ms-overflow-style: none;
 }

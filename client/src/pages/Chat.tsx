@@ -22,7 +22,7 @@ const Chat = () => {
         ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
     `}
             >
-                <div className="text-end px-3.5 py-3">
+                <div className="text-end px-3.5 py-0.5">
                     <Button
                         className="md:hidden"
                         onClick={() => setOpen(false)}
@@ -39,14 +39,139 @@ const Chat = () => {
                     Chats
                 </Button>
 
-                <div className="flex-1 no-scrollbar overflow-y-auto w-full px-5 py-1 my-4">
-                    <Card className="w-full flex-row px-1.5 flex bg-rose-900">
+                <div className="flex-1 no-scrollbar overflow-y-auto w-full px-5 my-4">
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
                         <Avatar>
                             <AvatarImage src="/image.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <p className="text-black">
-                            Ahmad Siddique Shikrani Baloch
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className="text-black font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                    <Card className="w-full flex-row items-center px-1.5 flex ">
+                        <Avatar>
+                            <AvatarImage src="/image.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <p className=" font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
+                        </p>
+                    </Card>
+                </div>
+                <div className="h-20 w-full ">
+                    <Card className="w-full flex-row items-center px-1.5 flex">
+                        <span><img className=' setting active:rotate-90 duration-200' src="/setting.png" alt="setting-icon" /></span> 
+                        <p className="font-bold text-[8px]">
+                            Ahmad Siddique Shikrani Baloch shikrani balooch
                         </p>
                     </Card>
                 </div>
@@ -54,13 +179,13 @@ const Chat = () => {
 
             {open && (
                 <div
-                    className="fixed inset-0 bg-black/30 z-40 md:hidden"
+                    className="fixed inset-0  z-40 md:hidden"
                     onClick={() => setOpen(false)}
                 />
             )}
 
             <div className="col-span-12 border-l md:col-span-9 lg:col-span-9 grid grid-rows-12 h-screen">
-                <header className="row-span-1 bg-rose-900 flex items-center px-4 gap-2 min-h-0">
+                <header className="row-span-1  flex items-center px-4 gap-2 min-h-0">
                     <Button
                         className="md:hidden bg-white px-2 py-1 rounded"
                         onClick={() => setOpen(true)}
@@ -79,7 +204,7 @@ const Chat = () => {
                 </header>
 
                 <main className="row-span-9 no-scrollbar overflow-y-auto p-4 flex flex-col gap-2 min-h-0">
-                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
+                    <div className="self-start retro text-sm  bg-accent-foreground px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
                         Hello Lorem ipsum dolor sit amet consectetur adipisicing
                         elit. Facere sapiente unde eum eos voluptas repudiandae,
                         distinctio vero autem modi sunt ullam maxime delectus.,
@@ -91,7 +216,7 @@ const Chat = () => {
                     <div className="self-end bg-white px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
                         Hi!
                     </div>
-                    <div className="self-start retro text-sm text-white bg-accent-foreground px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
+                    <div className="self-start retro text-sm bg-accent-foreground px-3 py-2 rounded max-w-xs wrap-break-word whitespace-pre-wrap">
                         Hello Lorem ipsum dolor sit amet consectetur adipisicing
                         elit. Facere sapiente unde eum eos voluptas repudiandae,
                         distinctio vero autem modi sunt ullam maxime delectus.,
@@ -105,7 +230,7 @@ const Chat = () => {
                 <footer className="row-span-2 border-t relative flex justify-center gap-4 items-center px-3 min-h-0">
                     <Textarea
                         placeholder="Type a message..."
-                        className="flex-1 resize-none px-3 text-white py-2 rounded outline-none pr-30"
+                        className="flex-1 resize-none px-3  py-2 rounded outline-none pr-30"
                     />
                     <Button className="px-4 py-2 absolute right-10 text-black bg-white rounded">
                         Send
