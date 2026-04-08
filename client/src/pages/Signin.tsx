@@ -13,6 +13,8 @@ import { Link } from 'react-router';
 import useApi from '@/hooks/apiClient';
 import axios from 'axios';
 import { Spinner } from '@/components/ui/8bit/spinner';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export type Inputs = {
     username: string;
@@ -20,6 +22,7 @@ export type Inputs = {
 };
 
 const Signin = () => {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -39,7 +42,11 @@ const Signin = () => {
         }),
     );
 
-    console.log("SiginData: ", SigninData)
+    useEffect(() => {
+        if (SigninData) {
+            navigate('/chat');
+        }
+    }, [SigninData]);
 
     console.log("SigininError: ", SigninError)
     return (

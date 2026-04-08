@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet, useNavigate } from 'react-router-dom';
 import useApi from './apiClient';
 import axios from 'axios';
 import LoaderFallback from './LoaderFallback';
@@ -8,7 +8,7 @@ const ProtectedRoute = () => {
     const navigate = useNavigate();
     const { data, loading, execute } = useApi(() =>
         axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/`,
+            `${import.meta.env.VITE_BACKEND_URL}/auth/verify`,
             {},
             {
                 withCredentials: true,
@@ -17,17 +17,21 @@ const ProtectedRoute = () => {
     );
 
     useEffect(() => {
+        // if (!loading && !data) {
+        //     navigate('/signin');
+        // }
         if (!loading && data) {
-            if (!data?.data.success) {
-                navigate('/signin');
+            if (data?.data.success) {
+                navigate('/chat');
             }
         }
     }, [data, loading]);
 
-    if (loading) return <LoaderFallback />
     useEffect(() => {
         execute();
     }, []);
+
+    if (loading) return <LoaderFallback />
     return (
         <div>
             <Suspense fallback={<LoaderFallback />}>

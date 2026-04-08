@@ -1,28 +1,27 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import {JwtModule} from '@nestjs/jwt'
+import { JwtModule } from '@nestjs/jwt';
 
 export type UserDocument = HydratedDocument<User> & {
-  generateAccessToken(password: string): Promise<string>;
-  generateRefreshToken(password: string): Promise<string>;
-  isPasswordCorrect(password: string) : Promise<boolean>;
+    generateAccessToken(password: string): Promise<string>;
+    generateRefreshToken(password: string): Promise<string>;
+    isPasswordCorrect(password: string): Promise<boolean>;
 };
 
 @Schema()
 export class User {
-  @Prop()
-  paraphrase?: string;
+    @Prop()
+    paraphrase?: string;
 
-  @Prop()
-  username!: string;
- 
-  @Prop()
-  password!: string;
+    @Prop()
+    username!: string;
 
-  @Prop({ type: String, default: null })
-  refreshToken?: string | null;
+    @Prop()
+    password!: string;
+
+    @Prop({ type: String, default: null })
+    refreshToken?: string | null;
 }
-
 
 export const userSchema = SchemaFactory.createForClass(User);
 

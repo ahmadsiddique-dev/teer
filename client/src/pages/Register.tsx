@@ -19,8 +19,10 @@ import useApi from '@/hooks/apiClient';
 import axios from 'axios';
 import { Link } from 'react-router';
 import { toast } from '@/components/ui/8bit/toast';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const debounced = useDebounceCallback(setUsername, 400);
 
@@ -62,6 +64,12 @@ const Register = () => {
         ),
     );
 
+    useEffect(() => {
+        if (registerData) {
+            navigate('/chat');
+        }
+    }, [registerData]);
+    
     useEffect(() => {
         execute();
     }, [username]);

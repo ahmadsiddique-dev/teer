@@ -2,8 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import './app/retro-globals.css';
-import App from './App.tsx';
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter } from 'react-router-dom';
 import { RouterProvider } from 'react-router/dom';
 import Signin from './pages/Signin.tsx';
 import './custom.css';
@@ -29,20 +28,20 @@ const router = createBrowserRouter([
                 element: <ProtectedRoute />,
                 children: [
                     {
-                        path: '/signin',
-                        element: <Signin />,
-                    },
-                    {
-                        path: '/register',
-                        element: <Register />,
-                    },
-                    {
                         path: '/chat',
                         element: <Chat />,
                     },
                 ],
             },
-        ],
+            {
+                path: '/signin',
+                element: <Signin />,
+            },
+            {
+                path: '/register',
+                element: <Register />,
+            },
+        ], 
     },
 ]);
 
