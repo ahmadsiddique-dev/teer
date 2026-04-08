@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { LoginUserDto, RegisterUserDto } from './dto/registerUser.dto';
 import { AuthService } from './auth.service';
 import * as express from 'express';
@@ -68,6 +68,23 @@ export class AuthController {
             message: 'User logged out successfully.',
             success: true,
         };
+    }
+
+    @Post('verify')
+    async checkRefreshToken(@Req() req: express.Request) {
+        const accessToken = req.cookies['accessToken']
+        const refreshToken = req.cookies['refreshToken']
+
+        // First check accessToken 
+        const accessResponse = await this.authService.checkAccessToken(accessToken)
+        if (accessResponse?.success) {
+            return accessResponse
+        }
+
+        // Then check refreshTOken
+        return this.authService.checkRefreshToken(refreshToken)
+
+
     }
 
     @Post('check-unique')

@@ -180,7 +180,7 @@ const Chat = () => {
                 />
             )}
 
-            <div className="col-span-12 border-l md:col-span-9 lg:col-span-9 flex flex-col h-dvh max-w-full">
+            <div className="col-span-12 border-l border-accent-foreground md:col-span-9 lg:col-span-9 flex flex-col h-dvh max-w-full">
                 <header className="shrink-0 flex items-center px-4 py-3 gap-2 min-h-0 border-b">
                     <Button
                         className="md:hidden bg-secondary text-secondary-foreground hover:bg-secondary/80 px-2 py-1 rounded"

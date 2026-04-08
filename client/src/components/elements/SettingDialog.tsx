@@ -23,10 +23,29 @@ import { Card } from '../ui/8bit/card';
 import { Button } from '../ui/8bit/button';
 import { useThemeConfig } from '@/components/active-theme';
 import { Theme } from '@/lib/themes';
+import useApi from '@/hooks/apiClient';
+import axios from 'axios';
+import { Spinner } from '../ui/8bit/spinner';
+import { useEffect } from 'react';
+import { toast } from '../ui/8bit/toast';
 
 const SettingDialog = () => {
     const { activeTheme, setActiveTheme } = useThemeConfig();
 
+    const {loading: logoutLoading, data: logoutData, error: logoutError, execute: logoutExecute} = useApi(() => 
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, "", {withCredentials: true})
+    )
+
+    useEffect(() => {
+        if (logoutData?.data.success) {
+            console.log("Data: ", logoutData)
+            toast(logoutData.data.message || "Logged out successfully.")
+        }
+
+        if (logoutError) {
+            toast(logoutError || "Some thing went wrong.")
+        }
+    }, [logoutData, logoutError])
     return (
         <div>
             <Card className="w-full flex-row items-center px-1.5 flex">
@@ -48,17 +67,27 @@ const SettingDialog = () => {
                             </DialogDescription>
                         </DialogHeader>
                         <DialogFooter className="flex flex-row justify-between items-center w-full gap-4 mt-4">
-                            <Select 
-                                value={activeTheme} 
-                                onValueChange={(val) => setActiveTheme(val as Theme)}
+                            <Select
+                                value={activeTheme}
+                                onValueChange={(val) =>
+                                    setActiveTheme(val as Theme)
+                                }
                             >
-                                <SelectTrigger className="w-[180px]">
+                                <SelectTrigger className="w-45">
                                     <SelectValue placeholder="Theme" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {Object.values(Theme).map((themeValue) => (
-                                        <SelectItem key={themeValue} value={themeValue}>
-                                            {themeValue.charAt(0).toUpperCase() + themeValue.slice(1).replace('-', ' ')}
+                                        <SelectItem
+                                            key={themeValue}
+                                            value={themeValue}
+                                        >
+                                            {themeValue
+                                                .charAt(0)
+                                                .toUpperCase() +
+                                                themeValue
+                                                    .slice(1)
+                                                    .replace('-', ' ')}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -72,10 +101,9 @@ const SettingDialog = () => {
                                     <p className="retro">
                                         Do you really want to logout
                                     </p>
-                                    <div className='flex justify-center items-center gap-9 my-4'>
-                                        <Button>Yes</Button>
-                                        <Button variant={'secondary'}>
-                                            No
+                                    <div className="flex justify-center items-center gap-9 my-4">
+                                        <Button onClick={logoutExecute} disabled={logoutLoading} variant={'outline'}>
+                                            {logoutLoading && <Spinner variant='diamond' />} Confirm
                                         </Button>
                                     </div>
                                 </PopoverContent>
