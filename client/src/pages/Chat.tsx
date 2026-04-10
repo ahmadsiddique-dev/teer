@@ -7,10 +7,63 @@ import {
 import { Button } from '@/components/ui/8bit/button';
 import { Card } from '@/components/ui/8bit/card';
 import { Textarea } from '@/components/ui/8bit/textarea';
-import { useState } from 'react';
+import React, { Activity, useEffect, useState, type ReactNode } from 'react';
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from '@/components/ui/8bit/tabs';
+import { Input } from '@/components/ui/8bit/input';
+import useApi from '@/hooks/apiClient';
+import axios from 'axios';
+import { Spinner } from '@/components/ui/8bit/spinner';
+import { useDebounceValue } from 'usehooks-ts';
 
 const Chat = () => {
     const [open, setOpen] = useState(false);
+    const [sideNav, setSideNav] = useState(true);
+    const [debouncedSearch, setSearch] = useDebounceValue<string>('', 500);
+
+    const {
+        data: searchData,
+        error: searchError,
+        execute: searchExecute,
+        loading: searchLoading,
+    } = useApi(() =>
+        axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/chat/search-user?user=${debouncedSearch}`,
+        ),
+    );
+
+    useEffect(() => {
+        searchExecute();
+    }, [debouncedSearch]);
+    const {
+        data: chatData,
+        loading: chatLoading,
+        execute: chatExecute,
+    } = useApi(() =>
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/chat/get-users`),
+    );
+
+    const handleChat = async () => {
+        chatExecute();
+        setSideNav(true);
+    };
+
+    useEffect(() => {
+        chatExecute();
+    }, []);
+
+    const handleNewChat = async () => {
+        setSideNav(false);
+    };
+
+    const handleSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value);
+    };
+
     return (
         <div className="grid grid-cols-12 w-full h-dvh overflow-hidden">
             <aside
@@ -36,138 +89,77 @@ const Chat = () => {
                     Teer
                 </p>
 
-                <Button className="mx-4 h-11 bg-primary text-primary-foreground hover:bg-primary/90">
-                    Chats
-                </Button>
+                <Tabs defaultValue="account" className="w-100">
+                    <TabsList className="grid w-ful md:max-w-2xs mx-auto my-1 grid-cols-2">
+                        <TabsTrigger onClick={() => handleChat()} value="chat">
+                            Chat
+                        </TabsTrigger>
+                        <TabsTrigger
+                            onClick={() => handleNewChat()}
+                            value="new"
+                        >
+                            New Chat
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="chat"></TabsContent>
+                    <TabsContent value="new">
+                        <Input
+                            defaultValue={''}
+                            onChange={(e) => handleSearchUser(e)}
+                            type="text"
+                            placeholder="search..."
+                            className="mx-6 border-l-transparent border-r-transparent"
+                        />
+                    </TabsContent>
+                </Tabs>
 
-                <div className="flex-1 min-h-0 no-scrollbar overflow-y-auto w-full px-5 my-4"> 
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className="text-primary font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                    <Card className="w-full flex-row items-center px-1.5 flex ">
-                        <Avatar>
-                            <AvatarImage src="/image.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <p className=" font-bold text-[8px]">
-                            Ahmad Siddique Shikrani Baloch shikrani balooch
-                        </p>
-                    </Card>
-                </div>
+                <Activity mode={sideNav ? 'visible' : 'hidden'}>
+                    <div className="flex-1 min-h-0 no-scrollbar overflow-y-auto w-full px-5 my-4">
+                        {chatLoading ? (
+                            <Spinner />
+                        ) : (
+                            chatData?.data.users.map((chat: any) => (
+                                <Card
+                                    key={chat._id}
+                                    className="w-full flex-row items-center px-1.5 flex "
+                                >
+                                    <Avatar>
+                                        <AvatarImage src="/image.png" />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
+                                    <p className="text-primary font-bold text-[8px]">
+                                        {chat.username}
+                                    </p>
+                                </Card>
+                            ))
+                        )}
+                    </div>
+                </Activity>
+
+                <Activity mode={sideNav ? 'hidden' : 'visible'}>
+                    <div className="flex-1 min-h-0 no-scrollbar overflow-y-auto w-full px-5 my-4">
+                        {searchLoading ? (
+                            'Loading...'
+                        ) : !searchData?.data?.users?.length ? (
+                            <div className="retro">No user found</div>
+                        ) : (
+                            searchData.data?.users.map((u: any) => (
+                                <Card
+                                    key={u._id}
+                                    className="w-full mt-1.5 flex-row items-center px-1.5 flex "
+                                >
+                                    <Avatar>
+                                        <AvatarImage src="/image.png" />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
+                                    <p className="text-primary font-bold text-[8px]">
+                                        {u.username}
+                                    </p>
+                                </Card>
+                            ))
+                        )}
+                    </div>
+                </Activity>
                 <div className="h-20 w-full ">
                     <SettingDialog />
                 </div>

@@ -91,11 +91,15 @@ const Register = () => {
                     onValueChange={(val) => setActiveTheme(val as Theme)}
                 >
                     <SelectTrigger className="w-45">
-                        <SelectValue className='invert' placeholder="Theme" />
+                        <SelectValue className="" placeholder="Theme" />
                     </SelectTrigger>
                     <SelectContent>
                         {Object.values(Theme).map((themeValue) => (
-                            <SelectItem key={themeValue} className='' value={themeValue}>
+                            <SelectItem
+                                key={themeValue}
+                                className=""
+                                value={themeValue}
+                            >
                                 {themeValue.charAt(0).toUpperCase() +
                                     themeValue.slice(1).replace('-', ' ')}
                             </SelectItem>
