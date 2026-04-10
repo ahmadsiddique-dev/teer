@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { JwtModule } from '@nestjs/jwt';
 
 export type UserDocument = HydratedDocument<User> & {
     generateAccessToken(password: string): Promise<string>;

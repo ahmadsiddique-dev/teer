@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventModule } from './event/event.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EventModule } from './event/event.module';
       },
     }),
     EventModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
