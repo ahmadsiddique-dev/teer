@@ -2,7 +2,7 @@
 
 const LoaderFallback = () => {
   return (
-    <div>Loading please wait a while...</div>
+    <div>Loading please wait a for while...</div>
   )
 }
 

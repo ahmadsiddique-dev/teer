@@ -12,9 +12,17 @@ import { Toaster } from '@/components/ui/sonner';
 import { ActiveThemeProvider } from '@/components/active-theme';
 import { Outlet } from 'react-router-dom';
 import ProtectedRoute from './hooks/ProtectedRoute.tsx';
+import getCookie from './hooks/getCookie.ts';
+import { Theme } from '@/lib/themes';
+
+const cookieTheme = getCookie('active_theme');
+
+const initialTheme = Object.values(Theme).includes(cookieTheme as Theme)
+    ? (cookieTheme as Theme)
+    : Theme.Arcade;
 
 const RootLayout = () => (
-    <ActiveThemeProvider initialTheme="arcade">
+    <ActiveThemeProvider initialTheme={initialTheme}>
         <Outlet />
     </ActiveThemeProvider>
 );
@@ -31,17 +39,17 @@ const router = createBrowserRouter([
                         path: '/chat',
                         element: <Chat />,
                     },
+                    {
+                        path: '/signin',
+                        element: <Signin />,
+                    },
+                    {
+                        path: '/register',
+                        element: <Register />,
+                    },
                 ],
             },
-            {
-                path: '/signin',
-                element: <Signin />,
-            },
-            {
-                path: '/register',
-                element: <Register />,
-            },
-        ], 
+        ],
     },
 ]);
 

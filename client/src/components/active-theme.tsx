@@ -1,4 +1,4 @@
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import {
   createContext,
   type ReactNode,
@@ -38,17 +38,17 @@ export function ActiveThemeProvider({
   children: ReactNode;
   initialTheme?: Theme;
 }) {
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
 
   const [activeTheme, setActiveTheme] = useState<Theme>(
     () => initialTheme || DEFAULT_THEME
   );
 
-  useEffect(() => {
-    queueMicrotask(() => {
-      setActiveTheme(DEFAULT_THEME);
-    });
-  }, [pathname]);
+  // useEffect(() => {
+  //   queueMicrotask(() => {
+  //     setActiveTheme(DEFAULT_THEME);
+  //   });
+  // }, [pathname]);
 
   useEffect(() => {
     setThemeCookie(activeTheme);

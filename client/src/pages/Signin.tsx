@@ -15,6 +15,15 @@ import axios from 'axios';
 import { Spinner } from '@/components/ui/8bit/spinner';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useThemeConfig } from '@/components/active-theme';
+import { Theme } from '@/lib/themes';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/8bit/select';
 
 export type Inputs = {
     username: string;
@@ -22,6 +31,7 @@ export type Inputs = {
 };
 
 const Signin = () => {
+    const { activeTheme, setActiveTheme } = useThemeConfig();
     const navigate = useNavigate();
     const {
         register,
@@ -29,7 +39,7 @@ const Signin = () => {
         formState: { errors },
     } = useForm<Inputs>();
 
-    const onSubmit: SubmitHandler<Inputs> = (data) =>  SigninExecute(data);
+    const onSubmit: SubmitHandler<Inputs> = (data) => SigninExecute(data);
 
     const {
         data: SigninData,
@@ -48,9 +58,27 @@ const Signin = () => {
         }
     }, [SigninData]);
 
-    console.log("SigininError: ", SigninError)
+    console.log('SigininError: ', SigninError);
     return (
-        <main className="max-w-2xl overflow-x-hidden  dark retro py-12 mx-auto">
+        <main className="max-w-2xl relative overflow-x-hidden retro py-12 mx-auto">
+            <div className="absolute right-10 top-10">
+                <Select
+                    value={activeTheme}
+                    onValueChange={(val) => setActiveTheme(val as Theme)}
+                >
+                    <SelectTrigger className="w-45">
+                        <SelectValue placeholder="Theme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {Object.values(Theme).map((themeValue) => (
+                            <SelectItem key={themeValue} value={themeValue}>
+                                {themeValue.charAt(0).toUpperCase() +
+                                    themeValue.slice(1).replace('-', ' ')}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
             <div>
                 <h1 className="text-primary text-center font-bold text-2xl tracking-tight">
                     <strong>TEER</strong>
@@ -120,11 +148,12 @@ const Signin = () => {
                                 {errors.password?.message}
                             </span>
                             <Button
-                            disabled={SiginLoading}
+                                disabled={SiginLoading}
                                 type="submit"
                                 className="max-w-50 bg-primary text-primary-foreground hover:bg-primary/90 my-5"
                             >
-                                {SiginLoading && <Spinner variant='diamond' />}Submit
+                                {SiginLoading && <Spinner variant="diamond" />}
+                                Submit
                             </Button>
                         </form>
                     </CardContent>
@@ -134,7 +163,7 @@ const Signin = () => {
                             className="underline-offset-4 underline"
                             to="/register"
                         >
-                             Signin
+                            Register
                         </Link>
                     </CardFooter>
                 </Card>

@@ -24,28 +24,37 @@ import { Button } from '../ui/8bit/button';
 import { useThemeConfig } from '@/components/active-theme';
 import { Theme } from '@/lib/themes';
 import useApi from '@/hooks/apiClient';
+import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { Spinner } from '../ui/8bit/spinner';
 import { useEffect } from 'react';
 import { toast } from '../ui/8bit/toast';
 
 const SettingDialog = () => {
+    const navigate = useNavigate();
     const { activeTheme, setActiveTheme } = useThemeConfig();
 
-    const {loading: logoutLoading, data: logoutData, error: logoutError, execute: logoutExecute} = useApi(() => 
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, "", {withCredentials: true})
-    )
+    const {
+        loading: logoutLoading,
+        data: logoutData,
+        error: logoutError,
+        execute: logoutExecute,
+    } = useApi(() =>
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, '', {
+            withCredentials: true,
+        }),
+    );
 
     useEffect(() => {
         if (logoutData?.data.success) {
-            console.log("Data: ", logoutData)
-            toast(logoutData.data.message || "Logged out successfully.")
+            console.log('Data: ', logoutData);
+            toast(logoutData.data.message || 'Logged out successfully.');
         }
 
         if (logoutError) {
-            toast(logoutError || "Some thing went wrong.")
+            toast(logoutError || 'Some thing went wrong.');
         }
-    }, [logoutData, logoutError])
+    }, [logoutData, logoutError]);
     return (
         <div>
             <Card className="w-full flex-row items-center px-1.5 flex">
@@ -102,8 +111,18 @@ const SettingDialog = () => {
                                         Do you really want to logout
                                     </p>
                                     <div className="flex justify-center items-center gap-9 my-4">
-                                        <Button onClick={logoutExecute} disabled={logoutLoading} variant={'outline'}>
-                                            {logoutLoading && <Spinner variant='diamond' />} Confirm
+                                        <Button
+                                            onClick={() => {
+                                                logoutExecute();
+                                                navigate('/signin');
+                                            }}
+                                            disabled={logoutLoading}
+                                            variant={'outline'}
+                                        >
+                                            {logoutLoading && (
+                                                <Spinner variant="diamond" />
+                                            )}{' '}
+                                            Confirm
                                         </Button>
                                     </div>
                                 </PopoverContent>

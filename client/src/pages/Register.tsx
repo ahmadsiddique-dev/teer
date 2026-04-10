@@ -20,10 +20,20 @@ import axios from 'axios';
 import { Link } from 'react-router';
 import { toast } from '@/components/ui/8bit/toast';
 import { useNavigate } from 'react-router-dom';
+import { useThemeConfig } from '@/components/active-theme';
+import { Theme } from '@/lib/themes';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/8bit/select';
 
 const Register = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
+    const { activeTheme, setActiveTheme } = useThemeConfig();
     const debounced = useDebounceCallback(setUsername, 400);
 
     type RegisterInputs = Inputs & {
@@ -47,12 +57,12 @@ const Register = () => {
         loading: registerLoading,
     } = useApi((payload) =>
         axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/auth/register`, payload, {withCredentials: true}
+            `${import.meta.env.VITE_BACKEND_URL}/auth/register`,
+            payload,
+            { withCredentials: true },
         ),
     );
 
-    console.log('registerError :>> ', registerError);
-    console.log('RegsiterData: ', registerData);
     debounced(watch('username'));
     if (registerError) {
         toast(registerError);
@@ -69,12 +79,30 @@ const Register = () => {
             navigate('/chat');
         }
     }, [registerData]);
-    
+
     useEffect(() => {
         execute();
     }, [username]);
     return (
-        <main className="max-w-2xl max-h-screen overflow-y-hidden overflow-x-hidden dark retro py-12 mx-auto">
+        <main className="max-w-2xl relative max-h-screen overflow-y-hidden overflow-x-hidden retro py-12 mx-auto">
+            <div className="absolute right-10 top-10">
+                <Select
+                    value={activeTheme}
+                    onValueChange={(val) => setActiveTheme(val as Theme)}
+                >
+                    <SelectTrigger className="w-45">
+                        <SelectValue className='invert' placeholder="Theme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {Object.values(Theme).map((themeValue) => (
+                            <SelectItem key={themeValue} className='' value={themeValue}>
+                                {themeValue.charAt(0).toUpperCase() +
+                                    themeValue.slice(1).replace('-', ' ')}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
             <div>
                 <h1 className="text-primary text-center font-bold text-2xl tracking-tight">
                     <strong>TEER</strong>

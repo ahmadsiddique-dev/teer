@@ -32,7 +32,7 @@ const Chat = () => {
                     </Button>
                 </div>
 
-                <p className="retro text-center text-2xl text-primary font-extrabold tracking-tight mb-3 mt-0 ">
+                <p className="retro text-center text-2xl text-secondary-foreground font-extrabold tracking-tight mb-3 mt-0 ">
                     Teer
                 </p>
 
@@ -241,7 +241,7 @@ const Chat = () => {
                     </div>
                 </main>
 
-                <footer className="shrink-0 border-t flex flex-row justify-center gap-4 items-center px-3 py-3 min-h-[60px]">
+                <footer className="shrink-0 border-t flex flex-row justify-center gap-4 items-center px-3 py-3 min-h-15">
                     <Textarea
                         placeholder="Type a message..."
                         className="flex-1 text-[8px] sm:text-sm resize-none max-h-[30vh] no-scrollbar px-3 py-2 text-secondary rounded outline-none"

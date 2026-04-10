@@ -17,21 +17,20 @@ const ProtectedRoute = () => {
     );
 
     useEffect(() => {
-        // if (!loading && !data) {
-        //     navigate('/signin');
-        // }
-        if (!loading && data) {
-            if (data?.data.success) {
-                navigate('/chat');
-            }
-        }
-    }, [data, loading]);
-
-    useEffect(() => {
         execute();
     }, []);
 
-    if (loading) return <LoaderFallback />
+    useEffect(() => {
+        console.log("data: ", data?.data)
+       if (!data?.data.success) {
+            navigate("/signin")
+       }
+       else {
+            navigate("/chat")
+       }
+    }, [data, loading]);
+
+    if (loading) return <LoaderFallback />;
     return (
         <div>
             <Suspense fallback={<LoaderFallback />}>
