@@ -76,6 +76,8 @@ const Register = () => {
 
     useEffect(() => {
         if (registerData) {
+            console.log("data in useeffect: ", registerData)
+            localStorage.setItem("_id", registerData.data._id)
             navigate('/chat');
         }
     }, [registerData]);

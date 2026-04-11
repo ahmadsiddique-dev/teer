@@ -7,7 +7,7 @@ import {
 import { Button } from '@/components/ui/8bit/button';
 import { Card } from '@/components/ui/8bit/card';
 import { Textarea } from '@/components/ui/8bit/textarea';
-import React, { Activity, useEffect, useState, type ReactNode } from 'react';
+import React, { Activity, useEffect, useState } from 'react';
 import {
     Tabs,
     TabsContent,
@@ -19,15 +19,45 @@ import useApi from '@/hooks/apiClient';
 import axios from 'axios';
 import { Spinner } from '@/components/ui/8bit/spinner';
 import { useDebounceValue } from 'usehooks-ts';
+import socket from '../socket.js';
 
 const Chat = () => {
     const [open, setOpen] = useState(false);
     const [sideNav, setSideNav] = useState(true);
     const [debouncedSearch, setSearch] = useDebounceValue<string>('', 500);
+    const [message, setMessage] = useState('');
+    const [messages, setMessages] = useState<any[]>([]);
+
+    useEffect(() => {
+        const handler = (data: any) => {
+            setMessages((prev) => [...prev, data]);
+        };
+
+        socket.on('message', handler);
+
+        return () => {
+            socket.off('message', handler);
+        };
+    }, []);
+
+    const sendMessage = () => {
+        console.log(messages);
+        socket.emit(
+            'message',
+            {
+                message,
+                userId: '69d3edfc05bc0ee570448aad',
+                receiverId: '69d494b14a771622079fcf51',
+            },
+            (data: any) => console.log(data),
+        );
+
+        setMessage('');
+    };
 
     const {
         data: searchData,
-        error: searchError,
+        // error: searchError,
         execute: searchExecute,
         loading: searchLoading,
     } = useApi(() =>
@@ -64,6 +94,14 @@ const Chat = () => {
         setSearch(e.target.value);
     };
 
+    const {} = useApi(() => 
+        axios.post("")
+    )
+
+    const handleNewChatWindow = (id: any) => {
+        const senderId = localStorage.getItem('_id');
+        console.log('ID: ', id, senderId);
+    };
     return (
         <div className="grid grid-cols-12 w-full h-dvh overflow-hidden">
             <aside
@@ -120,6 +158,9 @@ const Chat = () => {
                         ) : (
                             chatData?.data.users.map((chat: any) => (
                                 <Card
+                                    onClick={() =>
+                                        handleNewChatWindow(chat._id)
+                                    }
                                     key={chat._id}
                                     className="w-full flex-row items-center px-1.5 flex "
                                 >
@@ -231,14 +272,27 @@ const Chat = () => {
                         sint eveniet expedita, commodi vel incidunt quisquam
                         reprehe
                     </div>
+                    {messages.map((message, i) => (
+                        <div
+                            key={i}
+                            className="self-end retro text-[8px] md:text-sm bg-primary text-primary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap"
+                        >
+                            {message.content}
+                        </div>
+                    ))}
                 </main>
 
                 <footer className="shrink-0 border-t flex flex-row justify-center gap-4 items-center px-3 py-3 min-h-15">
                     <Textarea
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         placeholder="Type a message..."
                         className="flex-1 text-[8px] sm:text-sm resize-none max-h-[30vh] no-scrollbar px-3 py-2 text-secondary rounded outline-none"
                     />
-                    <Button className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded shrink-0">
+                    <Button
+                        onClick={() => sendMessage()}
+                        className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded shrink-0"
+                    >
                         Send
                     </Button>
                 </footer>

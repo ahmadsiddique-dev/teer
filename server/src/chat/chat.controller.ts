@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ChatService } from './chat.service';
 
 @Controller('chat')
@@ -15,4 +15,10 @@ export class ChatController {
     searchUsers(@Query('user') user: string) {
         return this.ChatService.searchUser(user)
     }
+
+    @Post('get-chat')
+    getChat(@Body() payload: any) {
+        return this.ChatService.getChat(payload)
+    }
+    
 }

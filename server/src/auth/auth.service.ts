@@ -75,9 +75,11 @@ export class AuthService {
         newUser.refreshToken = refreshToken;
         await newUser.save();
 
+        console.log("brodo: ", newUser._id)
         return {
             accessToken,
             refreshToken,
+            _id: newUser._id,
             username: newUser.username,
         };
     }
@@ -114,7 +116,9 @@ export class AuthService {
                 error: 'Something went wrong.',
             });
         }
+
         return {
+            _id: user._id,
             accessToken,
             refreshToken,
             username: user.username,
@@ -129,7 +133,6 @@ export class AuthService {
 
             const username = result ? result?.payload : null;
 
-            console.log("Yahaan pohncha chowk :: 01", result)
             if (!username) {
                 return {
                     success: false,

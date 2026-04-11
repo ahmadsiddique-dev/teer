@@ -12,8 +12,8 @@ export class AuthController {
     async regiserUser(
         @Body() registerUserDto: RegisterUserDto,
         @Res({ passthrough: true }) res: express.Response,
-    ): Promise<IRegister> {
-        let { accessToken, refreshToken, username } =
+    ): Promise<any> {
+        let { accessToken, refreshToken, username, _id } =
             await this.authService.registerUser(registerUserDto);
 
         res.cookie('accessToken', accessToken, {
@@ -27,6 +27,7 @@ export class AuthController {
         });
 
         return {
+            _id: _id,
             message: 'User created Successfully',
             username: username,
             success: true,
@@ -38,7 +39,7 @@ export class AuthController {
         @Body() registerUserDto: LoginUserDto,
         @Res({ passthrough: true }) res: express.Response,
     ): Promise<any> {
-        const { accessToken, refreshToken, username } =
+        const { accessToken, refreshToken, username, _id } =
             await this.authService.signInUser(registerUserDto);
 
         res.cookie('accessToken', accessToken, {
@@ -52,6 +53,7 @@ export class AuthController {
         });
 
         return {
+            _id: _id,
             message: 'User Loggedin Successfully.',
             username: username,
             success: true,

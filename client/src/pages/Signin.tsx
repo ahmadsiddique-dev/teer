@@ -54,6 +54,8 @@ const Signin = () => {
 
     useEffect(() => {
         if (SigninData) {
+            console.log("siging datda: ", SigninData)
+            localStorage.setItem("_id", SigninData.data?._id)
             navigate('/chat');
         }
     }, [SigninData]);
