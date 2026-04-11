@@ -35,7 +35,7 @@ const Chat = () => {
     const [debouncedSearch, setSearch] = useDebounceValue<string>('', 500);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<any[]>([]);
-    const [recieverId, setreceiverId] = useState('');
+    const [rid, setRid] = useState('')
 
     useEffect(() => {
         const handler = (data: any) => {
@@ -49,14 +49,14 @@ const Chat = () => {
         };
     }, []);
 
-    const sendMessage = (id: string) => {
+    const sendMessage = () => {
         console.log(messages);
         socket.emit(
             'message',
             {
                 message,
                 userId: getIdFromLocal(),
-                receiverId: id || "",
+                receiverId: rid, // just focus here that how can i set reciever id here any solution 
             },
             (data: any) => setMessages(data),
         );
@@ -175,8 +175,10 @@ const Chat = () => {
                         ) : (
                             chatData?.data.map((chat: any) => (
                                 <Card
-                                    onClick={() =>
+                                    onClick={() => {
+                                        
                                         chatMessagesExecute(chat._id)
+                                    }
                                     }
                                     key={chat._id}
                                     className="w-full flex-row mt-1 items-center px-1.5 flex "
@@ -204,8 +206,8 @@ const Chat = () => {
                             searchData.data?.users.map((u: any) => (
                                 <Card
                                     onClick={() => {
+                                        setRid(u._id)
                                         chatMessagesExecute(u._id);
-                                        setreceiverId(u._id)
                                     }}
                                     key={u._id}
                                     className="w-full mt-1.5 flex-row items-center px-1.5 flex "
@@ -278,7 +280,7 @@ const Chat = () => {
                         className="flex-1 text-[8px] sm:text-sm resize-none max-h-[30vh] no-scrollbar px-3 py-2 text-secondary rounded outline-none"
                     />
                     <Button
-                        onClick={() => sendMessage(recieverId)}
+                        onClick={() => sendMessage()}
                         className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded shrink-0"
                     >
                         Send
