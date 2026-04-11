@@ -35,6 +35,7 @@ const Chat = () => {
     const [debouncedSearch, setSearch] = useDebounceValue<string>('', 500);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<any[]>([]);
+    const [recieverId, setreceiverId] = useState('');
 
     useEffect(() => {
         const handler = (data: any) => {
@@ -48,16 +49,16 @@ const Chat = () => {
         };
     }, []);
 
-    const sendMessage = () => {
+    const sendMessage = (id: string) => {
         console.log(messages);
         socket.emit(
             'message',
             {
                 message,
                 userId: getIdFromLocal(),
-                receiverId: '69d3edaf05bc0ee570448aac',
+                receiverId: id || "",
             },
-            (data: any) => console.log(data),
+            (data: any) => setMessages(data),
         );
 
         setMessage('');
@@ -91,12 +92,15 @@ const Chat = () => {
         data: chatMessageData,
         error: chatMessagesError,
         execute: chatMessagesExecute,
-        loading: chatMessagesLoading
-    } = useApi((id) => 
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/chat/get-chat`, {senderId: getIdFromLocal(), receiverId: id})
-    )
+        loading: chatMessagesLoading,
+    } = useApi((id) =>
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/chat/get-chat`, {
+            senderId: getIdFromLocal(),
+            receiverId: id,
+        }),
+    );
 
-    console.log("Chatdata: ", chatMessageData)
+    console.log('Chatdata: ', chatMessageData);
 
     const handleChat = async () => {
         chatExecute();
@@ -199,6 +203,10 @@ const Chat = () => {
                         ) : (
                             searchData.data?.users.map((u: any) => (
                                 <Card
+                                    onClick={() => {
+                                        chatMessagesExecute(u._id);
+                                        setreceiverId(u._id)
+                                    }}
                                     key={u._id}
                                     className="w-full mt-1.5 flex-row items-center px-1.5 flex "
                                 >
@@ -246,17 +254,20 @@ const Chat = () => {
                 </header>
 
                 <main className="flex-1 no-scrollbar overflow-y-auto overflow-x-hidden p-4 flex flex-col gap-2 min-h-0">
-                    {/* <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
-                        Hello
-                    </div> */}
-                    {chatMessageData?.data.map((message: any) => (
-                        <div
-                            key={message._id}
-                            className="self-end retro text-[8px] md:text-sm bg-primary text-primary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap"
-                        >
-                            {message.content}
-                        </div>
-                    ))}
+                    {chatMessageData?.data?.length === 0 ? (
+                        <p className="retro text-center text-background opacity-35">
+                            Start Chat
+                        </p>
+                    ) : (
+                        chatMessageData?.data.map((m: any) => (
+                            <div
+                                key={m._id}
+                                className={`${getIdFromLocal() === m.sender ? 'self-end bg-primary text-primary-foreground' : 'self-start bg-secondary text-secondary-foreground'} retro text-[8px] md:text-sm px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap`}
+                            >
+                                {m.content}
+                            </div>
+                        ))
+                    )}
                 </main>
 
                 <footer className="shrink-0 border-t flex flex-row justify-center gap-4 items-center px-3 py-3 min-h-15">
@@ -267,7 +278,7 @@ const Chat = () => {
                         className="flex-1 text-[8px] sm:text-sm resize-none max-h-[30vh] no-scrollbar px-3 py-2 text-secondary rounded outline-none"
                     />
                     <Button
-                        onClick={() => sendMessage()}
+                        onClick={() => sendMessage(recieverId)}
                         className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded shrink-0"
                     >
                         Send
