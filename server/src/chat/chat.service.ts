@@ -99,4 +99,16 @@ export class ChatService {
         console.log('CData: ', messages);
         return messages;
     }
+
+    async getSidebarChat(id: string) {
+        const conversations = await this.ConversationModel.find({
+            participants: { $all: [id] },
+        }).populate('participants', "_id username").lean()
+
+        const data = conversations.map((e) => {
+            return e.participants[1];
+        });
+
+        return data;
+    }
 }

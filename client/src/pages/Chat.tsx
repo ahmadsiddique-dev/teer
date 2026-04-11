@@ -21,6 +21,14 @@ import { Spinner } from '@/components/ui/8bit/spinner';
 import { useDebounceValue } from 'usehooks-ts';
 import socket from '../socket.js';
 
+export function getIdFromLocal() {
+    const id = localStorage.getItem('_id');
+    if (!id) {
+        return null;
+    }
+    return id;
+}
+
 const Chat = () => {
     const [open, setOpen] = useState(false);
     const [sideNav, setSideNav] = useState(true);
@@ -46,8 +54,8 @@ const Chat = () => {
             'message',
             {
                 message,
-                userId: '69d3edfc05bc0ee570448aad',
-                receiverId: '69d494b14a771622079fcf51',
+                userId: getIdFromLocal(),
+                receiverId: '69d3edaf05bc0ee570448aac',
             },
             (data: any) => console.log(data),
         );
@@ -74,8 +82,21 @@ const Chat = () => {
         loading: chatLoading,
         execute: chatExecute,
     } = useApi(() =>
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/chat/get-users`),
+        axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/chat/sidebar-chat?id=${getIdFromLocal()}`,
+        ),
     );
+
+    const {
+        data: chatMessageData,
+        error: chatMessagesError,
+        execute: chatMessagesExecute,
+        loading: chatMessagesLoading
+    } = useApi((id) => 
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/chat/get-chat`, {senderId: getIdFromLocal(), receiverId: id})
+    )
+
+    console.log("Chatdata: ", chatMessageData)
 
     const handleChat = async () => {
         chatExecute();
@@ -94,14 +115,6 @@ const Chat = () => {
         setSearch(e.target.value);
     };
 
-    const {} = useApi(() => 
-        axios.post("")
-    )
-
-    const handleNewChatWindow = (id: any) => {
-        const senderId = localStorage.getItem('_id');
-        console.log('ID: ', id, senderId);
-    };
     return (
         <div className="grid grid-cols-12 w-full h-dvh overflow-hidden">
             <aside
@@ -156,13 +169,13 @@ const Chat = () => {
                         {chatLoading ? (
                             <Spinner />
                         ) : (
-                            chatData?.data.users.map((chat: any) => (
+                            chatData?.data.map((chat: any) => (
                                 <Card
                                     onClick={() =>
-                                        handleNewChatWindow(chat._id)
+                                        chatMessagesExecute(chat._id)
                                     }
                                     key={chat._id}
-                                    className="w-full flex-row items-center px-1.5 flex "
+                                    className="w-full flex-row mt-1 items-center px-1.5 flex "
                                 >
                                     <Avatar>
                                         <AvatarImage src="/image.png" />
@@ -233,48 +246,12 @@ const Chat = () => {
                 </header>
 
                 <main className="flex-1 no-scrollbar overflow-y-auto overflow-x-hidden p-4 flex flex-col gap-2 min-h-0">
-                    <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
-                        Hello Lorem ipsum dolor sit amet consectetur adipisicing
-                        elit. Facere sapiente unde eum eos voluptas repudiandae,
-                        distinctio vero autem modi sunt ullam maxime delectus.,
-                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                        elit. Magni cupiditate, eligendi alias perspiciatis,
-                        sint eveniet expedita, commodi vel incidunt quisquam
-                        reprehe
-                    </div>
-                    <div className="self-end retro text-[8px] md:text-sm bg-primary text-primary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
-                        Hi!
-                    </div>
-                    <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
-                        Hello Lorem ipsum dolor sit amet consectetur adipisicing
-                        elit. Facere sapiente unde eum eos voluptas repudiandae,
-                        distinctio vero autem modi sunt ullam maxime delectus.,
-                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                        elit. Magni cupiditate, eligendi alias perspiciatis,
-                        sint eveniet expedita, commodi vel incidunt quisquam
-                        reprehe
-                    </div>
-                    <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
-                        Hello Lorem ipsum dolor sit amet consectetur adipisicing
-                        elit. Facere sapiente unde eum eos voluptas repudiandae,
-                        distinctio vero autem modi sunt ullam maxime delectus.,
-                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                        elit. Magni cupiditate, eligendi alias perspiciatis,
-                        sint eveniet expedita, commodi vel incidunt quisquam
-                        reprehe
-                    </div>
-                    <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
-                        Hello Lorem ipsum dolor sit amet consectetur adipisicing
-                        elit. Facere sapiente unde eum eos voluptas repudiandae,
-                        distinctio vero autem modi sunt ullam maxime delectus.,
-                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                        elit. Magni cupiditate, eligendi alias perspiciatis,
-                        sint eveniet expedita, commodi vel incidunt quisquam
-                        reprehe
-                    </div>
-                    {messages.map((message, i) => (
+                    {/* <div className="self-start retro text-[8px] md:text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap">
+                        Hello
+                    </div> */}
+                    {chatMessageData?.data.map((message: any) => (
                         <div
-                            key={i}
+                            key={message._id}
                             className="self-end retro text-[8px] md:text-sm bg-primary text-primary-foreground px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap"
                         >
                             {message.content}

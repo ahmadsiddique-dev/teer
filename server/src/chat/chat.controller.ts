@@ -21,4 +21,8 @@ export class ChatController {
         return this.ChatService.getChat(payload)
     }
     
+    @Get('sidebar-chat') 
+    getSideBarChat(@Query('id') id: string) {
+        return this.ChatService.getSidebarChat(id)
+    }
 }
