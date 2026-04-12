@@ -1,0 +1,11 @@
+sequenceDiagram
+    participant Client
+    participant Server
+    participant Service
+
+    Client->>Server: 1. Establish WebSocket connection
+    Client->>Server: 2. Emit message payload
+    Server->>Service: 3. Save message in DB
+    Service-->>Server: 4. Saved message
+    Server-->>Client: 5. Emit message to sender and receiver
+    Client->>Client: 6. Update state and re-render UI

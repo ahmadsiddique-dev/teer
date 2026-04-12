@@ -21,13 +21,7 @@ import { Spinner } from '@/components/ui/8bit/spinner';
 import { useDebounceValue } from 'usehooks-ts';
 import socket from '../socket.js';
 
-export function getIdFromLocal() {
-    const id = localStorage.getItem('_id');
-    if (!id) {
-        return null;
-    }
-    return id;
-}
+
 
 const Chat = () => {
     const [open, setOpen] = useState(false);

@@ -29,6 +29,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/8bit/select';
+import useUser from '@/store/User.store';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -50,6 +51,8 @@ const Register = () => {
         registerExecute(data);
     };
 
+    const {setUser} = useUser((state) => state)
+    
     const {
         data: registerData,
         error: registerError,
@@ -62,6 +65,7 @@ const Register = () => {
             { withCredentials: true },
         ),
     );
+
 
     debounced(watch('username'));
     if (registerError) {
@@ -76,7 +80,7 @@ const Register = () => {
 
     useEffect(() => {
         if (registerData) {
-            console.log("data in useeffect: ", registerData)
+            setUser(registerData.data)
             localStorage.setItem("_id", registerData.data._id)
             navigate('/chat');
         }

@@ -1,0 +1,26 @@
+erDiagram
+    user ||--o{ messages : "sender"
+    user ||--o{ conversations : "participants"
+    conversations ||--o{ messages : "contains"
+
+    user {
+        string id PK
+        string username
+        string password
+        string paraphrase
+        string refreshToken
+    }
+
+    messages {
+        string conversation_id
+        string _id
+        string sender
+        string content
+        Data created_at
+    }
+
+    conversations {
+        string _id
+        Data createdAt
+        id_array participants
+    }
