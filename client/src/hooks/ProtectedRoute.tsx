@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import useApi from './apiClient';
 import axios from 'axios';
 import LoaderFallback from './LoaderFallback';
+import useUser from '../store/User.store';
 
 const ProtectedRoute = () => {
     const navigate = useNavigate();
@@ -16,16 +17,23 @@ const ProtectedRoute = () => {
         ),
     );
 
+    const { setUser } = useUser();
+
     useEffect(() => {
         execute();
     }, []);
 
     useEffect(() => {
+        if (loading || !data) return;
+        
         console.log("data: ", data?.data)
        if (!data?.data.success) {
             navigate("/signin")
        }
        else {
+            if (data?.data.user) {
+                setUser(data.data.user);
+            }
             navigate("/chat")
        }
     }, [data, loading]);

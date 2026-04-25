@@ -68,9 +68,11 @@ const Register = () => {
 
 
     debounced(watch('username'));
-    if (registerError) {
-        toast(registerError);
-    }
+    useEffect(() => {
+        if (registerError) {
+            toast(registerError);
+        }
+    }, [registerError]);
     const { data, loading, execute } = useApi(() =>
         axios.post<boolean>(
             `${import.meta.env.VITE_BACKEND_URL}/auth/check-unique`,

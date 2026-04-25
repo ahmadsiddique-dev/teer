@@ -49,7 +49,9 @@ const Chat = () => {
         socket.on('connect', registerSocket);
 
         const handler = (data: IMessage) => {
-            setMessages((prev) => [...prev, data]);
+            if (data.sender === user._id || data.sender === activeRecipient?.id) {
+                setMessages((prev) => [...prev, data]);
+            }
         };
 
         socket.on('message', handler);
@@ -58,7 +60,7 @@ const Chat = () => {
             socket.off('connect', registerSocket);
             socket.off('message', handler);
         };
-    }, [user?._id]);
+    }, [user?._id, activeRecipient?.id]);
 
     const sendMessage = () => {
         socket.emit('message', {
@@ -190,20 +192,22 @@ const Chat = () => {
                         {chatLoading ? (
                             <Spinner />
                         ) : chatData?.data.length === 0? <p className='retro text-center mt-3'>No Chat</p>: (
-                            chatData?.data.map((chat: IUser) => (
+                            chatData?.data
+                                .filter((chat: IUser) => chat._id !== user?._id)
+                                .map((chat: IUser) => (
                                 <Card
                                     onClick={() => {
                                         setActiveRecipient({ id: chat._id, name: chat.username, profileImage: chat.profileImage });
                                         chatMessagesExecute(chat._id);
                                     }}
                                     key={chat._id}
-                                    className="w-full flex-row mt-1 items-center px-1.5 flex "
+                                    className="w-full flex-row mt-1 items-center px-1.5 flex cursor-pointer hover:bg-secondary/20"
                                 >
                                     <Avatar>
-                                        <AvatarImage src={chat.profileImage || "/image.png"} />
-                                        <AvatarFallback>CN</AvatarFallback>
+                                        <AvatarImage src={chat.profileImage} />
+                                        <AvatarFallback>{chat.username.charAt(0).toUpperCase()}</AvatarFallback>
                                     </Avatar>
-                                    <p className="text-primary font-bold text-[8px]">
+                                    <p className="text-primary font-bold text-[8px] ml-2">
                                         {chat.username}
                                     </p>
                                 </Card>
@@ -219,20 +223,22 @@ const Chat = () => {
                         ) : !searchData?.data?.users?.length ? (
                             <div className="retro">No user found</div>
                         ) : (
-                            searchData.data?.users.map((u: IUser) => (
+                            searchData.data?.users
+                                .filter((u: IUser) => u._id !== user?._id)
+                                .map((u: IUser) => (
                                 <Card
                                     onClick={() => {
                                         setActiveRecipient({ id: u._id, name: u.username, profileImage: u.profileImage });
                                         chatMessagesExecute(u._id);
                                     }}
                                     key={u._id}
-                                    className="w-full mt-1.5 flex-row items-center px-1.5 flex "
+                                    className="w-full mt-1.5 flex-row items-center px-1.5 flex cursor-pointer hover:bg-secondary/20"
                                 >
                                     <Avatar>
-                                        <AvatarImage src={u.profileImage || "/image.png"} />
-                                        <AvatarFallback>CN</AvatarFallback>
+                                        <AvatarImage src={u.profileImage} />
+                                        <AvatarFallback>{u.username.charAt(0).toUpperCase()}</AvatarFallback>
                                     </Avatar>
-                                    <p className="text-primary font-bold text-[8px]">
+                                    <p className="text-primary font-bold text-[8px] ml-2">
                                         {u.username}
                                     </p>
                                 </Card>
@@ -262,8 +268,8 @@ const Chat = () => {
                     </Button>
                     <div className=" flex overflow-x-clip  justify-center items-center gap-1.5 ">
                         <Avatar>
-                            <AvatarImage src={activeRecipient?.profileImage || "/image.png"} />
-                            <AvatarFallback>CN</AvatarFallback>
+                            <AvatarImage src={activeRecipient?.profileImage} />
+                            <AvatarFallback>{activeRecipient?.name ? activeRecipient.name.charAt(0).toUpperCase() : '?'}</AvatarFallback>
                         </Avatar>
                         <p className="text-secondary text-[8px] font-bold sm:font-normal  sm:text-sm retro truncate">
                             {activeRecipient ? activeRecipient.name : 'Select a Chat'}

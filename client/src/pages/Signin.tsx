@@ -25,6 +25,7 @@ import {
     SelectValue,
 } from '@/components/ui/8bit/select';
 import useUser from '@/store/User.store';
+import { toast } from '@/components/ui/8bit/toast';
 
 export type Inputs = {
     username: string;
@@ -63,7 +64,11 @@ const Signin = () => {
         }
     }, [SigninData]);
 
-    console.log('SigininError: ', SigninError);
+    useEffect(() => {
+        if (SigninError) {
+            toast(SigninError);
+        }
+    }, [SigninError]);
     return (
         <main className="max-w-2xl relative overflow-x-hidden retro py-12 mx-auto">
             <div className="absolute right-10 top-10">

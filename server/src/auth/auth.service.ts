@@ -162,7 +162,8 @@ export class AuthService {
             return {
                 success: true,
                 message: "ja by bhai",
-                data: {accessToken, refreshToken, profileImage: data.profileImage}
+                data: {accessToken, refreshToken, profileImage: data.profileImage},
+                user: { _id: data._id, username: data.username, profileImage: data.profileImage }
             }
         } catch (error) {
             return {
@@ -189,10 +190,15 @@ export class AuthService {
             });
 
             if (verification) {
+                const user = await this.userModel.findOne({ username: verification.payload });
+                if (!user) {
+                     return { success: false, message: 'User not found' };
+                }
                 return {
                     success: true,
                     message: 'Valid Access Token',
                     payload: verification.payload,
+                    user: { _id: user._id, username: user.username, profileImage: user.profileImage }
                 };
             }
         } catch (error) {

@@ -20,7 +20,7 @@ export class ChatService {
 
     async getUser() {
         console.log('In service...');
-        const users = await this.UserModel.find({}, { username: 1 });
+        const users = await this.UserModel.find({}, { username: 1, profileImage: 1 });
         if (users.length === 0) {
             return {
                 success: true,
@@ -41,7 +41,7 @@ export class ChatService {
             {
                 username: { $regex: payload, $options: 'i' },
             },
-            { username: 1, _id: 1 },
+            { username: 1, _id: 1, profileImage: 1 },
         );
 
         if (users.length === 0) {
@@ -88,8 +88,13 @@ export class ChatService {
     }
 
     async getChat(payload: any) {
+        if (!payload.senderId || !payload.receiverId || payload.senderId === 'undefined' || payload.receiverId === 'undefined') {
+            return [];
+        }
+        const senderObjectId = new Types.ObjectId(payload.senderId);
+        const receiverObjectId = new Types.ObjectId(payload.receiverId);
         const cdata = await this.ConversationModel.findOne({
-            participants: { $all: [payload.senderId, payload.receiverId] },
+            participants: { $all: [senderObjectId, receiverObjectId] },
         });
 
         const messages = await this.MessageModel.find({
@@ -101,9 +106,13 @@ export class ChatService {
     }
 
     async getSidebarChat(id: string) {
+        if (!id || id === 'undefined') {
+            return [];
+        }
+        const objectId = new Types.ObjectId(id);
         const conversations = await this.ConversationModel.find({
-            participants: { $all: [id] },
-        }).populate('participants', '_id username').lean();
+            participants: { $all: [objectId] },
+        }).populate('participants', '_id username profileImage').lean();
 
         const data = conversations
             .map((e) => {
