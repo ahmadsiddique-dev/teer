@@ -83,6 +83,7 @@ const Chat = () => {
     useEffect(() => {
         searchExecute();
     }, [debouncedSearch]);
+
     const {
         data: chatData,
         loading: chatLoading,
@@ -117,8 +118,6 @@ const Chat = () => {
             chatMessagesExecute(firstChat._id);
         }
     }, [chatData, activeRecipient, chatMessagesExecute]);
-
-    console.log('Chatdata: ', chatMessageData);
 
     const handleChat = async () => {
         chatExecute();
@@ -190,7 +189,7 @@ const Chat = () => {
                     <div className="flex-1 min-h-0 no-scrollbar overflow-y-auto w-full px-5 my-4">
                         {chatLoading ? (
                             <Spinner />
-                        ) : (
+                        ) : chatData?.data.length === 0? <p className='retro text-center mt-3'>No Chat</p>: (
                             chatData?.data.map((chat: IUser) => (
                                 <Card
                                     onClick={() => {
