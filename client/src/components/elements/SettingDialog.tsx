@@ -1,7 +1,6 @@
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -21,13 +20,16 @@ import {
 } from '@/components/ui/8bit/select';
 import { Card } from '../ui/8bit/card';
 import { Button } from '../ui/8bit/button';
+import { Input } from '../ui/8bit/input';
+import { Label } from '../ui/8bit/label';
 import { useThemeConfig } from '@/components/active-theme';
 import { Theme } from '@/lib/themes';
 import useApi from '@/hooks/apiClient';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { Spinner } from '../ui/8bit/spinner';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import useUser from '@/store/User.store';
 import { toast } from '../ui/8bit/toast';
 
 const SettingDialog = () => {
@@ -55,6 +57,53 @@ const SettingDialog = () => {
             toast(logoutError || 'Some thing went wrong.');
         }
     }, [logoutData, logoutError]);
+
+    const { data: user, setUser } = useUser();
+    
+    // We use a local state for preview before it's uploaded successfully
+    const [previewImage, setPreviewImage] = React.useState<string | null>(null);
+
+    const [profileFile, setProfileFile] = React.useState<File | null>(null);
+    const [uploading, setUploading] = React.useState(false);
+    const [uploaded, setUploaded] = React.useState(false);
+
+    const uploadProfileImage = async (file: File) => {
+        setUploading(true);
+        setUploaded(false);
+        try {
+            const formData = new FormData();
+            formData.append('profileImage', file);
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/upload-profile`, formData, {
+                withCredentials: true,
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            if (response.data.success) {
+                setUploaded(true);
+                toast('Profile image uploaded successfully.');
+                setUser({ profileImage: response.data.profileImage });
+            } else {
+                toast(response.data.message || 'Upload failed.');
+            }
+        } catch (err: any) {
+            toast(err?.response?.data?.message || 'Upload failed.');
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setProfileFile(file);
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                setPreviewImage(ev.target?.result as string);
+            };
+            reader.readAsDataURL(file);
+            uploadProfileImage(file);
+        }
+    };
+
     return (
         <div>
             <Card className="w-full flex-row items-center px-1.5 flex">
@@ -69,12 +118,54 @@ const SettingDialog = () => {
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Profile</DialogTitle>
-                            <DialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete your account and remove your
-                                data from our servers.
-                            </DialogDescription>
                         </DialogHeader>
+                        <div className="flex flex-col gap-2 items-start w-full">
+                            <Label htmlFor="profile-image">Profile Image</Label>
+                            {!uploaded && (
+                                <Input
+                                    id="profile-image"
+                                    accept="image/*"
+                                    type="file"
+                                    onChange={handleProfileImageChange}
+                                    className="w-full"
+                                    disabled={uploading}
+                                />
+                            )}
+                            {uploading && (
+                                <div className="flex justify-center w-full mt-2">
+                                    <Spinner variant="diamond" />
+                                    <span className="ml-2">Uploading...</span>
+                                </div>
+                            )}
+                            {uploaded && !uploading && (
+                                <div className="flex justify-center w-full mt-2 text-green-600 font-bold">
+                                    ok
+                                </div>
+                            )}
+                            {(previewImage || user?.profileImage) && !uploading && (
+                                <div className="flex flex-col items-center w-full mt-2">
+                                    <img
+                                        src={previewImage || user?.profileImage}
+                                        alt="Profile Preview"
+                                        className="w-20 h-20 rounded-full object-cover border"
+                                    />
+                                    {uploaded && (
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="mt-2"
+                                            onClick={() => {
+                                                setUploaded(false);
+                                                setPreviewImage(null);
+                                                setProfileFile(null);
+                                            }}
+                                        >
+                                            Edit
+                                        </Button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                         <DialogFooter className="flex flex-row justify-between items-center w-full gap-4 mt-4">
                             <Select
                                 value={activeTheme}
@@ -131,7 +222,7 @@ const SettingDialog = () => {
                     </DialogContent>
                 </Dialog>
                 <p className="font-bold text-[8px] ml-2">
-                    Ahmad Siddique Shikrani Baloch shikrani balooch
+                    {user?.username || 'Guest'}
                 </p>
             </Card>
         </div>

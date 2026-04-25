@@ -11,6 +11,8 @@ import { User, UserDocument } from './schemas/auth.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
+import { v2 as cloudinary } from 'cloudinary';
+import * as streamifier from 'streamifier';
 
 @Injectable()
 export class AuthService {
@@ -81,6 +83,7 @@ export class AuthService {
             refreshToken,
             _id: newUser._id,
             username: newUser.username,
+            profileImage: newUser.profileImage,
         };
     }
 
@@ -122,6 +125,7 @@ export class AuthService {
             accessToken,
             refreshToken,
             username: user.username,
+            profileImage: user.profileImage,
         };
     }
 
@@ -158,7 +162,7 @@ export class AuthService {
             return {
                 success: true,
                 message: "ja by bhai",
-                data: {accessToken, refreshToken}
+                data: {accessToken, refreshToken, profileImage: data.profileImage}
             }
         } catch (error) {
             return {
@@ -181,13 +185,14 @@ export class AuthService {
             }
 
             const verification = await this.jwtService.verifyAsync(token, {
-                secret: process.env.CCESS_TOKEN_SECRET,
+                secret: process.env.ACCESS_TOKEN_SECRET,
             });
 
             if (verification) {
                 return {
                     success: true,
                     message: 'Valid Access Token',
+                    payload: verification.payload,
                 };
             }
         } catch (error) {
@@ -210,5 +215,58 @@ export class AuthService {
         }
 
         return false;
+    }
+
+    async uploadImageToCloudinary(file: any): Promise<string> {
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+            api_key: process.env.CLOUDINARY_API_KEY,
+            api_secret: process.env.CLOUDINARY_API_SECRET,
+        });
+
+        return new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                { folder: 'teer_profiles' },
+                (error, result) => {
+                    if (result) {
+                        resolve(result.secure_url);
+                    } else {
+                        reject(error);
+                    }
+                },
+            );
+
+            streamifier.createReadStream(file.buffer).pipe(uploadStream);
+        });
+    }
+
+    async uploadProfileImage(username: string, file: any) {
+        if (!file) {
+            throw new NotFoundException({
+                status: HttpStatus.BAD_REQUEST,
+                success: false,
+                error: 'No file provided',
+            });
+        }
+
+        let user = await this.userModel.findOne({ username });
+        if (!user) {
+            throw new NotFoundException({
+                status: HttpStatus.NOT_FOUND,
+                success: false,
+                error: 'User not found',
+            });
+        }
+
+        const secureUrl = await this.uploadImageToCloudinary(file);
+        
+        user.profileImage = secureUrl;
+        await user.save();
+
+        return {
+            success: true,
+            message: 'Profile image uploaded successfully',
+            profileImage: secureUrl,
+        };
     }
 }

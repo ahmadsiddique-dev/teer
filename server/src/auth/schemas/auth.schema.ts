@@ -20,6 +20,9 @@ export class User {
 
     @Prop({ type: String, default: null })
     refreshToken?: string | null;
+
+    @Prop({ type: String, default: null })
+    profileImage?: string | null;
 }
 
 export const userSchema = SchemaFactory.createForClass(User);

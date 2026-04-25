@@ -1,4 +1,5 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseInterceptors, UploadedFile, HttpStatus } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { LoginUserDto, RegisterUserDto } from './dto/registerUser.dto';
 import { AuthService } from './auth.service';
 import * as express from 'express';
@@ -92,5 +93,26 @@ export class AuthController {
     @Post('check-unique')
     async checkUniqueUsername(@Body() {username}: { username: string}): Promise<boolean> {
         return this.authService.uniqueUsername({username})
+    }
+
+    @Post('upload-profile')
+    @UseInterceptors(FileInterceptor('profileImage'))
+    async uploadProfileImage(
+        @Req() req: express.Request,
+        @UploadedFile() file: any,
+    ) {
+        const accessToken = req.cookies['accessToken'];
+        const accessResponse = await this.authService.checkAccessToken(accessToken);
+        
+        if (!accessResponse?.success) {
+            return {
+                success: false,
+                message: 'Unauthorized',
+                status: HttpStatus.UNAUTHORIZED,
+            };
+        }
+
+        const username = accessResponse.payload;
+        return this.authService.uploadProfileImage(username, file);
     }
 }

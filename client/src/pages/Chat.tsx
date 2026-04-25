@@ -32,7 +32,7 @@ const Chat = () => {
     const [debouncedSearch, setSearch] = useDebounceValue<string>('', 500);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<IMessage[]>([]);
-    const [activeRecipient, setActiveRecipient] = useState<{ id: string; name: string } | null>(null);
+    const [activeRecipient, setActiveRecipient] = useState<{ id: string; name: string; profileImage?: string } | null>(null);
     const { data: user } = useUser((state) => state);
 
     useEffect(() => {
@@ -114,7 +114,7 @@ const Chat = () => {
         const list = chatData?.data;
         if (list && list.length > 0 && !activeRecipient) {
             const firstChat = list[0] as IUser;
-            setActiveRecipient({ id: firstChat._id, name: firstChat.username });
+            setActiveRecipient({ id: firstChat._id, name: firstChat.username, profileImage: firstChat.profileImage });
             chatMessagesExecute(firstChat._id);
         }
     }, [chatData, activeRecipient, chatMessagesExecute]);
@@ -193,14 +193,14 @@ const Chat = () => {
                             chatData?.data.map((chat: IUser) => (
                                 <Card
                                     onClick={() => {
-                                        setActiveRecipient({ id: chat._id, name: chat.username });
+                                        setActiveRecipient({ id: chat._id, name: chat.username, profileImage: chat.profileImage });
                                         chatMessagesExecute(chat._id);
                                     }}
                                     key={chat._id}
                                     className="w-full flex-row mt-1 items-center px-1.5 flex "
                                 >
                                     <Avatar>
-                                        <AvatarImage src="/image.png" />
+                                        <AvatarImage src={chat.profileImage || "/image.png"} />
                                         <AvatarFallback>CN</AvatarFallback>
                                     </Avatar>
                                     <p className="text-primary font-bold text-[8px]">
@@ -222,14 +222,14 @@ const Chat = () => {
                             searchData.data?.users.map((u: IUser) => (
                                 <Card
                                     onClick={() => {
-                                        setActiveRecipient({ id: u._id, name: u.username });
+                                        setActiveRecipient({ id: u._id, name: u.username, profileImage: u.profileImage });
                                         chatMessagesExecute(u._id);
                                     }}
                                     key={u._id}
                                     className="w-full mt-1.5 flex-row items-center px-1.5 flex "
                                 >
                                     <Avatar>
-                                        <AvatarImage src="/image.png" />
+                                        <AvatarImage src={u.profileImage || "/image.png"} />
                                         <AvatarFallback>CN</AvatarFallback>
                                     </Avatar>
                                     <p className="text-primary font-bold text-[8px]">
@@ -262,7 +262,7 @@ const Chat = () => {
                     </Button>
                     <div className=" flex overflow-x-clip  justify-center items-center gap-1.5 ">
                         <Avatar>
-                            <AvatarImage src="/image.png" />
+                            <AvatarImage src={activeRecipient?.profileImage || "/image.png"} />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                         <p className="text-secondary text-[8px] font-bold sm:font-normal  sm:text-sm retro truncate">
