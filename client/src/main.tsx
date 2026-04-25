@@ -8,6 +8,7 @@ import Signin from './pages/Signin.tsx';
 import './custom.css';
 import Register from './pages/Register.tsx';
 import Chat from './pages/Chat.tsx';
+import App from './App.tsx';
 import { Toaster } from '@/components/ui/sonner';
 import { ActiveThemeProvider } from '@/components/active-theme';
 import { Outlet } from 'react-router-dom';
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
                 path: '/',
                 element: <ProtectedRoute />,
                 children: [
+                    {
+                        index: true,
+                        element: <App />,
+                    },
                     {
                         path: '/chat',
                         element: <Chat />,
