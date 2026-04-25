@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client";
 
-const socket: Socket = io("http://localhost:3000/chat", {
+const socket: Socket = io(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
     withCredentials: true,
 });
 
