@@ -96,7 +96,7 @@ const Register = () => {
                     value={activeTheme}
                     onValueChange={(val) => setActiveTheme(val as Theme)}
                 >
-                    <SelectTrigger className="w-45">
+                    <SelectTrigger className="w-45 bg-primary text-primary-foreground border-2 border-primary-foreground">
                         <SelectValue className="" placeholder="Theme" />
                     </SelectTrigger>
                     <SelectContent>

@@ -24,6 +24,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/8bit/select';
+import useUser from '@/store/User.store';
 
 export type Inputs = {
     username: string;
@@ -52,10 +53,12 @@ const Signin = () => {
         }),
     );
 
+    const { setUser } = useUser((state) => state);
+
     useEffect(() => {
         if (SigninData) {
-            console.log("siging datda: ", SigninData)
-            localStorage.setItem("_id", SigninData.data?._id)
+            setUser(SigninData.data);
+            localStorage.setItem('_id', SigninData.data?._id);
             navigate('/chat');
         }
     }, [SigninData]);
@@ -68,7 +71,7 @@ const Signin = () => {
                     value={activeTheme}
                     onValueChange={(val) => setActiveTheme(val as Theme)}
                 >
-                    <SelectTrigger className="w-45">
+                    <SelectTrigger className="w-45 bg-primary text-primary-foreground border-2 border-primary-foreground">
                         <SelectValue placeholder="Theme" />
                     </SelectTrigger>
                     <SelectContent>

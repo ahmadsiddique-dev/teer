@@ -103,11 +103,13 @@ export class ChatService {
     async getSidebarChat(id: string) {
         const conversations = await this.ConversationModel.find({
             participants: { $all: [id] },
-        }).populate('participants', "_id username").lean()
+        }).populate('participants', '_id username').lean();
 
-        const data = conversations.map((e) => {
-            return e.participants[1];
-        });
+        const data = conversations
+            .map((e) => {
+                return e.participants.find((p: any) => p._id.toString() !== id);
+            })
+            .filter(Boolean);
 
         return data;
     }

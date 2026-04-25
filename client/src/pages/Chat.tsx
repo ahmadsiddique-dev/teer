@@ -20,6 +20,9 @@ import axios from 'axios';
 import { Spinner } from '@/components/ui/8bit/spinner';
 import { useDebounceValue } from 'usehooks-ts';
 import socket from '../socket.js';
+import useUser from '@/store/User.store';
+import type { IUser } from '@/types/user.types';
+import type { IMessage } from '@/types/chat.types';
 
 
 
@@ -28,39 +31,47 @@ const Chat = () => {
     const [sideNav, setSideNav] = useState(true);
     const [debouncedSearch, setSearch] = useDebounceValue<string>('', 500);
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState<any[]>([]);
-    const [rid, setRid] = useState('')
+    const [messages, setMessages] = useState<IMessage[]>([]);
+    const [activeRecipient, setActiveRecipient] = useState<{ id: string; name: string } | null>(null);
+    const { data: user } = useUser((state) => state);
 
     useEffect(() => {
-        const handler = (data: any) => {
+        if (!user?._id) return;
+
+        const registerSocket = () => {
+            socket.emit('register', user._id);
+        };
+
+        if (socket.connected) {
+            registerSocket();
+        }
+
+        socket.on('connect', registerSocket);
+
+        const handler = (data: IMessage) => {
             setMessages((prev) => [...prev, data]);
         };
 
         socket.on('message', handler);
 
         return () => {
+            socket.off('connect', registerSocket);
             socket.off('message', handler);
         };
-    }, []);
+    }, [user?._id]);
 
     const sendMessage = () => {
-        console.log(messages);
-        socket.emit(
-            'message',
-            {
-                message,
-                userId: getIdFromLocal(),
-                receiverId: rid, // just focus here that how can i set reciever id here any solution 
-            },
-            (data: any) => setMessages(data),
-        );
+        socket.emit('message', {
+            message,
+            userId: user?._id,
+            receiverId: activeRecipient?.id || '',
+        });
 
         setMessage('');
     };
 
     const {
         data: searchData,
-        // error: searchError,
         execute: searchExecute,
         loading: searchLoading,
     } = useApi(() =>
@@ -78,21 +89,34 @@ const Chat = () => {
         execute: chatExecute,
     } = useApi(() =>
         axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/chat/sidebar-chat?id=${getIdFromLocal()}`,
+            `${import.meta.env.VITE_BACKEND_URL}/chat/sidebar-chat?id=${user?._id}`,
         ),
     );
 
     const {
         data: chatMessageData,
-        error: chatMessagesError,
         execute: chatMessagesExecute,
-        loading: chatMessagesLoading,
-    } = useApi((id) =>
+    } = useApi((id?: string) =>
         axios.post(`${import.meta.env.VITE_BACKEND_URL}/chat/get-chat`, {
-            senderId: getIdFromLocal(),
+            senderId: user?._id,
             receiverId: id,
         }),
     );
+
+    useEffect(() => {
+        if (chatMessageData?.data) {
+            setMessages(chatMessageData.data);
+        }
+    }, [chatMessageData]);
+
+    useEffect(() => {
+        const list = chatData?.data;
+        if (list && list.length > 0 && !activeRecipient) {
+            const firstChat = list[0] as IUser;
+            setActiveRecipient({ id: firstChat._id, name: firstChat.username });
+            chatMessagesExecute(firstChat._id);
+        }
+    }, [chatData, activeRecipient, chatMessagesExecute]);
 
     console.log('Chatdata: ', chatMessageData);
 
@@ -167,13 +191,12 @@ const Chat = () => {
                         {chatLoading ? (
                             <Spinner />
                         ) : (
-                            chatData?.data.map((chat: any) => (
+                            chatData?.data.map((chat: IUser) => (
                                 <Card
                                     onClick={() => {
-                                        
-                                        chatMessagesExecute(chat._id)
-                                    }
-                                    }
+                                        setActiveRecipient({ id: chat._id, name: chat.username });
+                                        chatMessagesExecute(chat._id);
+                                    }}
                                     key={chat._id}
                                     className="w-full flex-row mt-1 items-center px-1.5 flex "
                                 >
@@ -197,10 +220,10 @@ const Chat = () => {
                         ) : !searchData?.data?.users?.length ? (
                             <div className="retro">No user found</div>
                         ) : (
-                            searchData.data?.users.map((u: any) => (
+                            searchData.data?.users.map((u: IUser) => (
                                 <Card
                                     onClick={() => {
-                                        setRid(u._id)
+                                        setActiveRecipient({ id: u._id, name: u.username });
                                         chatMessagesExecute(u._id);
                                     }}
                                     key={u._id}
@@ -244,21 +267,21 @@ const Chat = () => {
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                         <p className="text-secondary text-[8px] font-bold sm:font-normal  sm:text-sm retro truncate">
-                            Ahmad Siddique Shikrani Baloch
+                            {activeRecipient ? activeRecipient.name : 'Select a Chat'}
                         </p>
                     </div>
                 </header>
 
                 <main className="flex-1 no-scrollbar overflow-y-auto overflow-x-hidden p-4 flex flex-col gap-2 min-h-0">
-                    {chatMessageData?.data?.length === 0 ? (
+                    {messages.length === 0 ? (
                         <p className="retro text-center text-background opacity-35">
                             Start Chat
                         </p>
                     ) : (
-                        chatMessageData?.data.map((m: any) => (
+                        messages.map((m: IMessage) => (
                             <div
                                 key={m._id}
-                                className={`${getIdFromLocal() === m.sender ? 'self-end bg-primary text-primary-foreground' : 'self-start bg-secondary text-secondary-foreground'} retro text-[8px] md:text-sm px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap`}
+                                className={`${user?._id === m.sender ? 'self-end bg-primary text-primary-foreground' : 'self-start bg-secondary text-secondary-foreground'} retro text-[8px] md:text-sm px-3 py-2 rounded max-w-[85%] md:max-w-[70%] lg:max-w-[60%] wrap-break-word whitespace-pre-wrap`}
                             >
                                 {m.content}
                             </div>
@@ -266,20 +289,22 @@ const Chat = () => {
                     )}
                 </main>
 
-                <footer className="shrink-0 border-t flex flex-row justify-center gap-4 items-center px-3 py-3 min-h-15">
-                    <Textarea
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Type a message..."
-                        className="flex-1 text-[8px] sm:text-sm resize-none max-h-[30vh] no-scrollbar px-3 py-2 text-secondary rounded outline-none"
-                    />
-                    <Button
-                        onClick={() => sendMessage()}
-                        className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded shrink-0"
-                    >
-                        Send
-                    </Button>
-                </footer>
+                {activeRecipient && (
+                    <footer className="shrink-0 border-t flex flex-row justify-center gap-4 items-center px-3 py-3 min-h-15">
+                        <Textarea
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            placeholder="Type a message..."
+                            className="flex-1 text-[8px] sm:text-sm resize-none max-h-[30vh] no-scrollbar px-3 py-2 text-secondary rounded outline-none"
+                        />
+                        <Button
+                            onClick={() => sendMessage()}
+                            className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded shrink-0"
+                        >
+                            Send
+                        </Button>
+                    </footer>
+                )}
             </div>
         </div>
     );

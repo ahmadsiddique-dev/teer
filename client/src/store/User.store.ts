@@ -1,32 +1,34 @@
 import { create } from 'zustand';
-
-type User = {
-    username: string;
-    user_id: string;
-    receiver_id: string;
-};
+import type { IUser } from '../types/user.types';
 
 interface UserState {
     loading: boolean;
     error: null | string;
-    data: User | null;
+    data: IUser | null;
 
-    setUser: (user: Partial<User>) => void;
+    setUser: (user: Partial<IUser>) => void;
     setLoading: (loading: boolean) => void;
     setError: (error: string | null) => void;
+    logout: () => void;
 }
 
+const idFromLocal = localStorage.getItem('_id');
+
 const useUser = create<UserState>((set) => ({
-    data: null,
+    data: idFromLocal ? { _id: idFromLocal, username: '' } : null,
     loading: false,
     error: null,
 
-    setUser: (user: Partial<User>) =>
+    setUser: (user: Partial<IUser>) =>
         set((state) => ({
-            data: state.data ? { ...state.data, ...user } : (user as User),
+            data: state.data ? { ...state.data, ...user } : (user as IUser),
         })),
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),
+    logout: () => {
+        localStorage.removeItem('_id');
+        set({ data: null });
+    },
 }));
 
 export default useUser;
