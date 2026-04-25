@@ -21,7 +21,6 @@ const useUser = create<UserState>((set) => ({
     loading: false,
     error: null,
 
-    // Actions
     setUser: (user: Partial<User>) =>
         set((state) => ({
             data: state.data ? { ...state.data, ...user } : (user as User),
