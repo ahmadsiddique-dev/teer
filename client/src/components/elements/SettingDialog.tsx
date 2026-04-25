@@ -63,7 +63,7 @@ const SettingDialog = () => {
     // We use a local state for preview before it's uploaded successfully
     const [previewImage, setPreviewImage] = React.useState<string | null>(null);
 
-    const [profileFile, setProfileFile] = React.useState<File | null>(null);
+    const [, setProfileFile] = React.useState<File | null>(null);
     const [uploading, setUploading] = React.useState(false);
     const [uploaded, setUploaded] = React.useState(false);
 
