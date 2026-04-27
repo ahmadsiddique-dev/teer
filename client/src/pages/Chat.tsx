@@ -221,7 +221,7 @@ const Chat = () => {
                         {searchLoading ? (
                             'Loading...'
                         ) : !searchData?.data?.users?.length ? (
-                            <div className="retro">No user found</div>
+                            <div className="retro text-center mt-3">No user found</div>
                         ) : (
                             searchData.data?.users
                                 .filter((u: IUser) => u._id !== user?._id)

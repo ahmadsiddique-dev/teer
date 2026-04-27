@@ -21,7 +21,6 @@ import {
 import { Card } from '../ui/8bit/card';
 import { Button } from '../ui/8bit/button';
 import { Input } from '../ui/8bit/input';
-import { Label } from '../ui/8bit/label';
 import { useThemeConfig } from '@/components/active-theme';
 import { Theme } from '@/lib/themes';
 import useApi from '@/hooks/apiClient';
@@ -31,6 +30,7 @@ import { Spinner } from '../ui/8bit/spinner';
 import React, { useEffect } from 'react';
 import useUser from '@/store/User.store';
 import { toast } from '../ui/8bit/toast';
+import { Label } from '../ui/8bit/label';
 
 const SettingDialog = () => {
     const navigate = useNavigate();
@@ -120,15 +120,16 @@ const SettingDialog = () => {
                             <DialogTitle>Profile</DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col gap-2 items-start w-full">
-                            <Label htmlFor="profile-image">Profile Image</Label>
+                            {uploaded && !uploaded && <Label htmlFor="profile-image" className='h-23 self-center bg-muted w-2xs border '></Label>}
                             {!uploaded && (
                                 <Input
                                     id="profile-image"
                                     accept="image/*"
                                     type="file"
                                     onChange={handleProfileImageChange}
-                                    className="w-full"
+                                    className="w-full border-none!"
                                     disabled={uploading}
+                                    hidden
                                 />
                             )}
                             {uploading && (
@@ -137,17 +138,17 @@ const SettingDialog = () => {
                                     <span className="ml-2">Uploading...</span>
                                 </div>
                             )}
-                            {uploaded && !uploading && (
+                            {/* {uploaded && !uploading && (
                                 <div className="flex justify-center w-full mt-2 text-green-600 font-bold">
                                     ok
                                 </div>
-                            )}
+                            )} */}
                             {(previewImage || user?.profileImage) && !uploading && (
                                 <div className="flex flex-col items-center w-full mt-2">
                                     <img
                                         src={previewImage || user?.profileImage}
                                         alt="Profile Preview"
-                                        className="w-20 h-20 rounded-full object-cover border"
+                                        className="w-20 h-20 border-2 rounded-full object-cover border-primary mb-2"
                                     />
                                     {uploaded && (
                                         <Button
