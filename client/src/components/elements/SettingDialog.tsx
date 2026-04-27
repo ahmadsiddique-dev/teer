@@ -27,7 +27,8 @@ import useApi from '@/hooks/apiClient';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { Spinner } from '../ui/8bit/spinner';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { User } from 'lucide-react';
 import useUser from '@/store/User.store';
 import { toast } from '../ui/8bit/toast';
 import { Label } from '../ui/8bit/label';
@@ -60,12 +61,11 @@ const SettingDialog = () => {
 
     const { data: user, setUser } = useUser();
     
-    // We use a local state for preview before it's uploaded successfully
     const [previewImage, setPreviewImage] = React.useState<string | null>(null);
-
     const [, setProfileFile] = React.useState<File | null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [uploading, setUploading] = React.useState(false);
-    const [uploaded, setUploaded] = React.useState(false);
+    const [, setUploaded] = React.useState(false);
 
     const uploadProfileImage = async (file: File) => {
         setUploading(true);
@@ -120,8 +120,33 @@ const SettingDialog = () => {
                             <DialogTitle>Profile</DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col gap-2 items-start w-full">
-                            {uploaded && !uploaded && <Label htmlFor="profile-image" className='h-23 self-center bg-muted w-2xs border '></Label>}
-                            {!uploaded && (
+                            <div className="flex flex-row gap-16 w-full ml-18 justify-center items-center">
+                                {!(previewImage || user?.profileImage) && !uploading && (
+                                    <Label htmlFor='profile-image' className=" items-center">
+                                        <div className="flex items-center justify-center w-48 h-32 border border-[#b39ddb] rounded-2xl bg-[#222]">
+                                            <User size={80} color="#b39ddb" />
+                                        </div>
+                                    </Label>
+                                )}
+                                {(previewImage || user?.profileImage) && !uploading && (
+                                    <div className="ml-18">
+                                        <img
+                                            src={previewImage || user?.profileImage}
+                                            alt="Profile Preview"
+                                            className="w-32 self-center h-20 border-2 rounded-full object-cover border-primary mb-2 bg-[#222]"
+                                        />
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="mt-2"
+                                            onClick={() => {
+                                                if (fileInputRef.current) fileInputRef.current.click();
+                                            }}
+                                        >
+                                            Edit
+                                        </Button>
+                                    </div>
+                                )}
                                 <Input
                                     id="profile-image"
                                     accept="image/*"
@@ -130,40 +155,13 @@ const SettingDialog = () => {
                                     className="w-full border-none!"
                                     disabled={uploading}
                                     hidden
+                                    ref={fileInputRef}
                                 />
-                            )}
+                            </div>
                             {uploading && (
                                 <div className="flex justify-center w-full mt-2">
                                     <Spinner variant="diamond" />
                                     <span className="ml-2">Uploading...</span>
-                                </div>
-                            )}
-                            {/* {uploaded && !uploading && (
-                                <div className="flex justify-center w-full mt-2 text-green-600 font-bold">
-                                    ok
-                                </div>
-                            )} */}
-                            {(previewImage || user?.profileImage) && !uploading && (
-                                <div className="flex flex-col items-center w-full mt-2">
-                                    <img
-                                        src={previewImage || user?.profileImage}
-                                        alt="Profile Preview"
-                                        className="w-20 h-20 border-2 rounded-full object-cover border-primary mb-2"
-                                    />
-                                    {uploaded && (
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="mt-2"
-                                            onClick={() => {
-                                                setUploaded(false);
-                                                setPreviewImage(null);
-                                                setProfileFile(null);
-                                            }}
-                                        >
-                                            Edit
-                                        </Button>
-                                    )}
                                 </div>
                             )}
                         </div>
