@@ -7,11 +7,15 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
+import * as dotenv from 'dotenv';
+
+// Load environment variables before the decorator is evaluated
+dotenv.config();
 
 @WebSocketGateway({
     namespace: 'chat',
     cors: {
-        origin: 'http://localhost:5173',
+        origin: process.env.ORIGIN,
         credentials: true,
     },
 })
