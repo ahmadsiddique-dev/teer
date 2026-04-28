@@ -3,7 +3,6 @@ import { ChatService } from './chat.service';
 
 @Controller('chat')
 export class ChatController {
-
     constructor(private ChatService: ChatService) {}
 
     @Get('get-users')
@@ -13,16 +12,16 @@ export class ChatController {
 
     @Get('search-user')
     searchUsers(@Query('user') user: string) {
-        return this.ChatService.searchUser(user)
+        return this.ChatService.searchUser(user);
     }
 
     @Post('get-chat')
     getChat(@Body() payload: any) {
-        return this.ChatService.getChat(payload)
+        return this.ChatService.getChat(payload);
     }
-    
-    @Get('sidebar-chat') 
+
+    @Get('sidebar-chat')
     getSideBarChat(@Query('id') id: string) {
-        return this.ChatService.getSidebarChat(id)
+        return this.ChatService.getSidebarChat(id);
     }
 }

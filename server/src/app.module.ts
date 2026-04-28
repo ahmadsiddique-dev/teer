@@ -8,26 +8,25 @@ import { EventModule } from './event/event.module';
 import { ChatModule } from './chat/chat.module';
 
 @Module({
-  imports: [
-    AuthModule, 
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        const mongoUri = configService.get<string>('MONGODB_URI') || '';
-        return {
-          uri: `${mongoUri}/teer`,
-        };
-      },
-    }),
-    EventModule,
-    ChatModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        AuthModule,
+        ConfigModule.forRoot({
+            isGlobal: true,
+        }),
+        MongooseModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => {
+                const mongoUri = configService.get<string>('MONGODB_URI') || '';
+                return {
+                    uri: `${mongoUri}/teer`,
+                };
+            },
+        }),
+        EventModule,
+        ChatModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}
-

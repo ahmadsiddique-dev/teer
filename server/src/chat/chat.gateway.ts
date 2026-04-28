@@ -33,11 +33,19 @@ export class ChatGateway {
     @SubscribeMessage('message')
     async handleMessage(
         @ConnectedSocket() client: Socket,
-        @MessageBody() payload: { message: string; userId: string; receiverId: string },
+        @MessageBody()
+        payload: { message: string; userId: string; receiverId: string },
     ) {
-        console.log(`[Socket] Received message from ${payload.userId} to ${payload.receiverId}: ${payload.message}`);
+        console.log(
+            `[Socket] Received message from ${payload.userId} to ${payload.receiverId}: ${payload.message}`,
+        );
         const message = await this.chatService.sendMessage(payload);
-        console.log(`[Socket] Emitting message to ${payload.userId} and ${payload.receiverId}`);
-        this.server.to(payload.userId).to(payload.receiverId).emit('message', message);
+        console.log(
+            `[Socket] Emitting message to ${payload.userId} and ${payload.receiverId}`,
+        );
+        this.server
+            .to(payload.userId)
+            .to(payload.receiverId)
+            .emit('message', message);
     }
 }

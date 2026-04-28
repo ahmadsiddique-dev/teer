@@ -77,7 +77,7 @@ export class AuthService {
         newUser.refreshToken = refreshToken;
         await newUser.save();
 
-        console.log("brodo: ", newUser._id)
+        console.log('brodo: ', newUser._id);
         return {
             accessToken,
             refreshToken,
@@ -91,7 +91,7 @@ export class AuthService {
         const { username, password } = data;
         console.log('BData: ', username, password);
 
-        let user = await this.userModel.findOne({ username });
+        const user = await this.userModel.findOne({ username });
 
         if (!user) {
             throw new NotFoundException({
@@ -140,8 +140,8 @@ export class AuthService {
             if (!username) {
                 return {
                     success: false,
-                    message: "Payload missing in RefreshToken"
-                }
+                    message: 'Payload missing in RefreshToken',
+                };
             }
 
             const data = await this.userModel.findOne({ username });
@@ -149,22 +149,30 @@ export class AuthService {
             if (!data) {
                 return {
                     success: false,
-                    message: "User doesn't exists"
-                }
+                    message: "User doesn't exists",
+                };
             }
 
             const accessToken = await this.generateAccessToken(data.username);
             const refreshToken = await this.generateRefreshToken(data.username);
 
             data.refreshToken = refreshToken;
-            await data.save()
+            await data.save();
 
             return {
                 success: true,
-                message: "ja by bhai",
-                data: {accessToken, refreshToken, profileImage: data.profileImage},
-                user: { _id: data._id, username: data.username, profileImage: data.profileImage }
-            }
+                message: 'ja by bhai',
+                data: {
+                    accessToken,
+                    refreshToken,
+                    profileImage: data.profileImage,
+                },
+                user: {
+                    _id: data._id,
+                    username: data.username,
+                    profileImage: data.profileImage,
+                },
+            };
         } catch (error) {
             return {
                 success: false,
@@ -190,15 +198,21 @@ export class AuthService {
             });
 
             if (verification) {
-                const user = await this.userModel.findOne({ username: verification.payload });
+                const user = await this.userModel.findOne({
+                    username: verification.payload,
+                });
                 if (!user) {
-                     return { success: false, message: 'User not found' };
+                    return { success: false, message: 'User not found' };
                 }
                 return {
                     success: true,
                     message: 'Valid Access Token',
                     payload: verification.payload,
-                    user: { _id: user._id, username: user.username, profileImage: user.profileImage }
+                    user: {
+                        _id: user._id,
+                        username: user.username,
+                        profileImage: user.profileImage,
+                    },
                 };
             }
         } catch (error) {
@@ -255,7 +269,7 @@ export class AuthService {
             });
         }
 
-        let user = await this.userModel.findOne({ username });
+        const user = await this.userModel.findOne({ username });
         if (!user) {
             throw new NotFoundException({
                 status: HttpStatus.NOT_FOUND,
@@ -265,7 +279,7 @@ export class AuthService {
         }
 
         const secureUrl = await this.uploadImageToCloudinary(file);
-        
+
         user.profileImage = secureUrl;
         await user.save();
 

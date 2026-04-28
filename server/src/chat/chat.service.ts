@@ -20,7 +20,10 @@ export class ChatService {
 
     async getUser() {
         console.log('In service...');
-        const users = await this.UserModel.find({}, { username: 1, profileImage: 1 });
+        const users = await this.UserModel.find(
+            {},
+            { username: 1, profileImage: 1 },
+        );
         if (users.length === 0) {
             return {
                 success: true,
@@ -88,7 +91,12 @@ export class ChatService {
     }
 
     async getChat(payload: any) {
-        if (!payload.senderId || !payload.receiverId || payload.senderId === 'undefined' || payload.receiverId === 'undefined') {
+        if (
+            !payload.senderId ||
+            !payload.receiverId ||
+            payload.senderId === 'undefined' ||
+            payload.receiverId === 'undefined'
+        ) {
             return [];
         }
         const senderObjectId = new Types.ObjectId(payload.senderId);
@@ -112,7 +120,9 @@ export class ChatService {
         const objectId = new Types.ObjectId(id);
         const conversations = await this.ConversationModel.find({
             participants: { $all: [objectId] },
-        }).populate('participants', '_id username profileImage').lean();
+        })
+            .populate('participants', '_id username profileImage')
+            .lean();
 
         const data = conversations
             .map((e) => {

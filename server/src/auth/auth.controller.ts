@@ -1,4 +1,13 @@
-import { Body, Controller, Post, Req, Res, UseInterceptors, UploadedFile, HttpStatus } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Post,
+    Req,
+    Res,
+    UseInterceptors,
+    UploadedFile,
+    HttpStatus,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { LoginUserDto, RegisterUserDto } from './dto/registerUser.dto';
 import { AuthService } from './auth.service';
@@ -14,7 +23,7 @@ export class AuthController {
         @Body() registerUserDto: RegisterUserDto,
         @Res({ passthrough: true }) res: express.Response,
     ): Promise<any> {
-        let { accessToken, refreshToken, username, _id } =
+        const { accessToken, refreshToken, username, _id } =
             await this.authService.registerUser(registerUserDto);
 
         res.cookie('accessToken', accessToken, {
@@ -75,24 +84,25 @@ export class AuthController {
 
     @Post('verify')
     async checkRefreshToken(@Req() req: express.Request) {
-        const accessToken = req.cookies['accessToken']
-        const refreshToken = req.cookies['refreshToken']
+        const accessToken = req.cookies['accessToken'];
+        const refreshToken = req.cookies['refreshToken'];
 
-        // First check accessToken 
-        const accessResponse = await this.authService.checkAccessToken(accessToken)
+        // First check accessToken
+        const accessResponse =
+            await this.authService.checkAccessToken(accessToken);
         if (accessResponse?.success) {
-            return accessResponse
+            return accessResponse;
         }
 
         // Then check refreshTOken
-        return this.authService.checkRefreshToken(refreshToken)
-
-
+        return this.authService.checkRefreshToken(refreshToken);
     }
 
     @Post('check-unique')
-    async checkUniqueUsername(@Body() {username}: { username: string}): Promise<boolean> {
-        return this.authService.uniqueUsername({username})
+    async checkUniqueUsername(
+        @Body() { username }: { username: string },
+    ): Promise<boolean> {
+        return this.authService.uniqueUsername({ username });
     }
 
     @Post('upload-profile')
@@ -102,8 +112,9 @@ export class AuthController {
         @UploadedFile() file: any,
     ) {
         const accessToken = req.cookies['accessToken'];
-        const accessResponse = await this.authService.checkAccessToken(accessToken);
-        
+        const accessResponse =
+            await this.authService.checkAccessToken(accessToken);
+
         if (!accessResponse?.success) {
             return {
                 success: false,
