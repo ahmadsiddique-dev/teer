@@ -28,12 +28,14 @@ export class AuthController {
 
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
+            sameSite: 'none',
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
+            sameSite: 'none',
         });
 
         return {
@@ -54,12 +56,14 @@ export class AuthController {
 
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
+            sameSite: 'none',
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
+            sameSite: 'none',
         });
 
         return {
@@ -74,8 +78,8 @@ export class AuthController {
     async logoutUser(
         @Res({ passthrough: true }) res: express.Response,
     ): Promise<{ message: string; success: boolean }> {
-        res.clearCookie('accessToken');
-        res.clearCookie('refreshToken');
+        res.clearCookie('accessToken', { sameSite: 'none', secure: true });
+        res.clearCookie('refreshToken', { sameSite: 'none', secure: true });
         return {
             message: 'User logged out successfully.',
             success: true,

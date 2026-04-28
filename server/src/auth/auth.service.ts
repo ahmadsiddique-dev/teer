@@ -13,6 +13,7 @@ import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { v2 as cloudinary } from 'cloudinary';
 import * as streamifier from 'streamifier';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -57,10 +58,11 @@ export class AuthService {
                 error: 'User already exists',
             });
         }
+        const hashedPassword = await bcrypt.hash(data.password, 10);
         const newUser = await this.userModel.create({
             paraphrase: data.paraphrase,
             username: data.username,
-            password: data.password,
+            password: hashedPassword,
             refreshToken: null,
         });
 
@@ -99,7 +101,8 @@ export class AuthService {
             });
         }
 
-        if (!(password === user.password)) {
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
             throw new UnauthorizedException({
                 status: HttpStatus.UNAUTHORIZED,
                 success: false,
