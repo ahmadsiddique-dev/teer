@@ -19,7 +19,6 @@ export class ChatService {
     ) {}
 
     async getUser() {
-        console.log('In service...');
         const users = await this.UserModel.find(
             {},
             { username: 1, profileImage: 1 },
@@ -39,7 +38,6 @@ export class ChatService {
     }
 
     async searchUser(payload: string) {
-        console.log('payload: ', payload);
         const users = await this.UserModel.find(
             {
                 username: { $regex: payload, $options: 'i' },
@@ -79,8 +77,6 @@ export class ChatService {
             });
         }
 
-        console.log('COnversation: ', conversation);
-
         const newMessage = await this.MessageModel.create({
             conversation_id: conversation._id,
             sender: userObjectId,
@@ -108,8 +104,6 @@ export class ChatService {
         const messages = await this.MessageModel.find({
             conversation_id: cdata?._id,
         });
-        console.log('payload: ', payload);
-        console.log('CData: ', messages);
         return messages;
     }
 

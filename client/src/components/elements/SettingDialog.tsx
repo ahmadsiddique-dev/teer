@@ -50,7 +50,6 @@ const SettingDialog = () => {
 
     useEffect(() => {
         if (logoutData?.data.success) {
-            console.log('Data: ', logoutData);
             toast(logoutData.data.message || 'Logged out successfully.');
         }
 
@@ -59,7 +58,7 @@ const SettingDialog = () => {
         }
     }, [logoutData, logoutError]);
 
-    const { data: user, setUser } = useUser();
+    const { data: user, setUser, logout } = useUser();
     
     const [previewImage, setPreviewImage] = React.useState<string | null>(null);
     const [, setProfileFile] = React.useState<File | null>(null);
@@ -81,6 +80,8 @@ const SettingDialog = () => {
                 setUploaded(true);
                 toast('Profile image uploaded successfully.');
                 setUser({ profileImage: response.data.profileImage });
+                setPreviewImage(null);
+                
             } else {
                 toast(response.data.message || 'Upload failed.');
             }
@@ -119,33 +120,23 @@ const SettingDialog = () => {
                         <DialogHeader>
                             <DialogTitle>Profile</DialogTitle>
                         </DialogHeader>
-                        <div className="flex flex-col gap-2 items-start w-full">
-                            <div className="flex flex-row gap-16 w-full ml-18 justify-center items-center">
-                                {!(previewImage || user?.profileImage) && !uploading && (
-                                    <Label htmlFor='profile-image' className=" items-center">
-                                        <div className="flex items-center justify-center w-48 h-32 border border-[#b39ddb] rounded-2xl bg-[#222]">
-                                            <User size={80} color="#b39ddb" />
-                                        </div>
+                        <div className="flex flex-col gap-2 items-center w-full">
+                            <div className="flex flex-col w-full justify-center items-center">
+                                {!uploading && (
+                                    <Label htmlFor='profile-image' className="cursor-pointer flex flex-col items-center gap-2">
+                                        {!(previewImage || user?.profileImage) ? (
+                                            <div className="flex items-center justify-center w-24 h-24 border border-[#b39ddb] rounded-full bg-[#222]">
+                                                <User size={48} color="#b39ddb" />
+                                            </div>
+                                        ) : (
+                                            <img
+                                                src={previewImage ?? user?.profileImage}
+                                                alt="Profile Preview"
+                                                className="w-24 h-24 border-2 rounded-full object-cover border-primary bg-[#222]"
+                                            />
+                                        )}
+                                        <span className="text-xs text-muted-foreground">Click to change</span>
                                     </Label>
-                                )}
-                                {(previewImage || user?.profileImage) && !uploading && (
-                                    <div className="ml-18">
-                                        <img
-                                            src={previewImage || user?.profileImage}
-                                            alt="Profile Preview"
-                                            className="w-32 self-center h-20 border-2 rounded-full object-cover border-primary mb-2 bg-[#222]"
-                                        />
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="mt-2"
-                                            onClick={() => {
-                                                if (fileInputRef.current) fileInputRef.current.click();
-                                            }}
-                                        >
-                                            Edit
-                                        </Button>
-                                    </div>
                                 )}
                                 <Input
                                     id="profile-image"
@@ -204,6 +195,7 @@ const SettingDialog = () => {
                                         <Button
                                             onClick={() => {
                                                 logoutExecute();
+                                                logout();
                                                 navigate('/signin');
                                             }}
                                             disabled={logoutLoading}
