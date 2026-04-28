@@ -77,7 +77,6 @@ export class AuthService {
         newUser.refreshToken = refreshToken;
         await newUser.save();
 
-        console.log('brodo: ', newUser._id);
         return {
             accessToken,
             refreshToken,
@@ -89,7 +88,6 @@ export class AuthService {
 
     async signInUser(data: RegisterUserDto) {
         const { username, password } = data;
-        console.log('BData: ', username, password);
 
         const user = await this.userModel.findOne({ username });
 
@@ -229,7 +227,6 @@ export class AuthService {
     async uniqueUsername({ username }: { username: string }) {
         const user = await this.userModel.findOne({ username }, { _id: 1 });
 
-        console.log('user: ', user);
         if (!user) {
             return true;
         }

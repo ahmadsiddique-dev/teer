@@ -50,7 +50,6 @@ const SettingDialog = () => {
 
     useEffect(() => {
         if (logoutData?.data.success) {
-            console.log('Data: ', logoutData);
             toast(logoutData.data.message || 'Logged out successfully.');
         }
 

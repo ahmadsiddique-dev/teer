@@ -26,7 +26,6 @@ const ProtectedRoute = () => {
     useEffect(() => {
         if (loading || !data) return;
         
-        console.log("data: ", data?.data)
        if (!data?.data.success) {
             navigate("/signin")
        }
