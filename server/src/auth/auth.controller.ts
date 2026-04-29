@@ -55,7 +55,7 @@ export class AuthController {
         @Body() registerUserDto: LoginUserDto,
         @Res({ passthrough: true }) res: express.Response,
     ): Promise<any> {
-        const { accessToken, refreshToken, username, _id } =
+        const { accessToken, refreshToken, username, _id, profileImage } =
             await this.authService.signInUser(registerUserDto);
 
         res.cookie('accessToken', accessToken, {
@@ -74,6 +74,7 @@ export class AuthController {
             _id: _id,
             message: 'User Loggedin Successfully.',
             username: username,
+            profileImage: profileImage,
             success: true,
         };
     }

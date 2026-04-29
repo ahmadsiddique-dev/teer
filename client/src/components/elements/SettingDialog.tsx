@@ -33,7 +33,7 @@ import useUser from '@/store/User.store';
 import { toast } from '../ui/8bit/toast';
 import { Label } from '../ui/8bit/label';
 
-const SettingDialog = () => {
+const SettingDialog = ({ children }: { children?: React.ReactNode }) => {
     const navigate = useNavigate();
     const { activeTheme, setActiveTheme } = useThemeConfig();
 
@@ -215,6 +215,9 @@ const SettingDialog = () => {
                 <p className="font-bold text-[8px] ml-2">
                     {user?.username || 'Guest'}
                 </p>
+                {children && (
+                    <div className="ml-auto">{children}</div>
+                )}
             </Card>
         </div>
     );
