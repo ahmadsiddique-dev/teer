@@ -296,7 +296,6 @@ export class AuthService {
     // Managing user-deletion stuff from here
 
     async getRemainingTime(username: string) {
-
         if (!username) {
             throw new BadRequestException({
                 status: HttpStatus.BAD_REQUEST,
@@ -338,8 +337,8 @@ export class AuthService {
 
         return {
             formatedTime,
-            remainingTime
-        }
+            remainingTime,
+        };
     }
 
     async UpdateTimeToDelete(username: string, editedTime: number) {
@@ -363,7 +362,8 @@ export class AuthService {
 
         const deleteTime: Date = user.deleteTime;
 
-        const remainingTimeToDelete = new Date(deleteTime).getTime() - Date.now();
+        const remainingTimeToDelete =
+            new Date(deleteTime).getTime() - Date.now();
 
         if (editedTime > remainingTimeToDelete) {
             throw new BadRequestException({
@@ -374,15 +374,12 @@ export class AuthService {
         }
 
         user.deleteTime = new Date(Date.now() + editedTime);
-        await user.save()
+        await user.save();
 
         return {
             success: true,
-            message: "Time to delete updated successfully"
-        }
+            message: 'Time to delete updated successfully',
+        };
     }
 
-
-    @Cron('0 */2 * * * *')
-    handleProfiles() {}
 }
