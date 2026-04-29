@@ -7,6 +7,10 @@ import {
     UseInterceptors,
     UploadedFile,
     HttpStatus,
+    Get,
+    Param,
+    Query,
+    Patch,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { LoginUserDto, RegisterUserDto } from './dto/registerUser.dto';
@@ -129,5 +133,24 @@ export class AuthController {
 
         const username = accessResponse.payload;
         return this.authService.uploadProfileImage(username, file);
+    }
+
+    @Get('remaining-time')
+    getRemainingTime(@Query('username') username: string) {
+        return this.authService.getRemainingTime(username);
+    }
+
+    @Patch('update-time')
+    async updateTimeToDeleted(
+        @Body()
+        {
+            username,
+            editedTime,
+        }: {
+            username: string;
+            editedTime: number;
+        },
+    ) {
+        return this.authService.UpdateTimeToDelete(username, editedTime)
     }
 }
