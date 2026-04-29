@@ -30,6 +30,7 @@ import {
     SelectValue,
 } from '@/components/ui/8bit/select';
 import useUser from '@/store/User.store';
+import OnboardingDialog from '@/components/elements/OnboardingDialog';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -93,6 +94,7 @@ const Register = () => {
     }, [username]);
     return (
         <main className="max-w-2xl relative max-h-screen overflow-y-hidden overflow-x-hidden retro py-12 mx-auto">
+            <OnboardingDialog />
             <div className="absolute right-10 top-10">
                 <Select
                     value={activeTheme}
@@ -199,7 +201,7 @@ const Register = () => {
                         </form>
                     </CardContent>
                     <CardFooter className="text-center">
-                        Less than 7days account? &ensp;
+                        Less than 7 hours account? &ensp;
                         <Link
                             className="underline-offset-4 underline"
                             to="/signin"
