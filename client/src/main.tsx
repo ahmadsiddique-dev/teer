@@ -2,17 +2,17 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import './app/retro-globals.css';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { RouterProvider } from 'react-router/dom';
 import Signin from './pages/Signin.tsx';
 import './custom.css';
 import Register from './pages/Register.tsx';
 import Chat from './pages/Chat.tsx';
-import App from './App.tsx';
 import { Toaster } from '@/components/ui/sonner';
 import { ActiveThemeProvider } from '@/components/active-theme';
 import { Outlet } from 'react-router-dom';
 import ProtectedRoute from './hooks/ProtectedRoute.tsx';
+import PublicRoute from './hooks/PublicRoute.tsx';
 import getCookie from './hooks/getCookie.ts';
 import { Theme } from '@/lib/themes';
 
@@ -34,23 +34,27 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <ProtectedRoute />,
+                element: <Navigate to="/register" replace />,
+            },
+            {
+                element: <PublicRoute />,
                 children: [
                     {
-                        index: true,
-                        element: <App />,
-                    },
-                    {
-                        path: '/chat',
-                        element: <Chat />,
+                        path: '/register',
+                        element: <Register />,
                     },
                     {
                         path: '/signin',
                         element: <Signin />,
                     },
+                ],
+            },
+            {
+                element: <ProtectedRoute />,
+                children: [
                     {
-                        path: '/register',
-                        element: <Register />,
+                        path: '/chat',
+                        element: <Chat />,
                     },
                 ],
             },

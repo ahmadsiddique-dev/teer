@@ -5,15 +5,13 @@ import axios from 'axios';
 import LoaderFallback from './LoaderFallback';
 import useUser from '../store/User.store';
 
-const ProtectedRoute = () => {
+const PublicRoute = () => {
     const navigate = useNavigate();
     const { data, loading, execute } = useApi(() =>
         axios.post(
             `${import.meta.env.VITE_BACKEND_URL}/auth/verify`,
             {},
-            {
-                withCredentials: true,
-            },
+            { withCredentials: true },
         ),
     );
 
@@ -25,19 +23,17 @@ const ProtectedRoute = () => {
 
     useEffect(() => {
         if (loading || !data) return;
-        
-       if (!data?.data.success) {
-            navigate("/register")
-       }
-       else {
+
+        if (data?.data.success) {
             if (data?.data.user) {
                 setUser(data.data.user);
             }
-            navigate("/chat")
-       }
+            navigate('/chat');
+        }
     }, [data, loading]);
 
     if (loading) return <LoaderFallback />;
+
     return (
         <div>
             <Suspense fallback={<LoaderFallback />}>
@@ -47,4 +43,4 @@ const ProtectedRoute = () => {
     );
 };
 
-export default ProtectedRoute;
+export default PublicRoute;

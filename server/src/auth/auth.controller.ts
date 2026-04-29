@@ -7,6 +7,10 @@ import {
     UseInterceptors,
     UploadedFile,
     HttpStatus,
+    Get,
+    Param,
+    Query,
+    Patch,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { LoginUserDto, RegisterUserDto } from './dto/registerUser.dto';
@@ -51,7 +55,7 @@ export class AuthController {
         @Body() registerUserDto: LoginUserDto,
         @Res({ passthrough: true }) res: express.Response,
     ): Promise<any> {
-        const { accessToken, refreshToken, username, _id } =
+        const { accessToken, refreshToken, username, _id, profileImage } =
             await this.authService.signInUser(registerUserDto);
 
         res.cookie('accessToken', accessToken, {
@@ -70,6 +74,7 @@ export class AuthController {
             _id: _id,
             message: 'User Loggedin Successfully.',
             username: username,
+            profileImage: profileImage,
             success: true,
         };
     }
@@ -129,5 +134,24 @@ export class AuthController {
 
         const username = accessResponse.payload;
         return this.authService.uploadProfileImage(username, file);
+    }
+
+    @Get('remaining-time')
+    getRemainingTime(@Query('username') username: string) {
+        return this.authService.getRemainingTime(username);
+    }
+
+    @Patch('update-time')
+    async updateTimeToDeleted(
+        @Body()
+        {
+            username,
+            editedTime,
+        }: {
+            username: string;
+            editedTime: number;
+        },
+    ) {
+        return this.authService.UpdateTimeToDelete(username, editedTime)
     }
 }

@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     ConflictException,
     HttpStatus,
     Injectable,
@@ -289,4 +290,93 @@ export class AuthService {
             profileImage: secureUrl,
         };
     }
+
+    // Managing user-deletion stuff from here
+
+    async getRemainingTime(username: string) {
+        if (!username) {
+            throw new BadRequestException({
+                status: HttpStatus.BAD_REQUEST,
+                success: false,
+                error: 'Username not provided',
+            });
+        }
+
+        const user = await this.userModel.findOne({ username });
+
+        if (!user) {
+            throw new NotFoundException({
+                status: HttpStatus.BAD_REQUEST,
+                success: false,
+                error: 'No Such a use exists',
+            });
+        }
+
+        const deleteTime: Date = user.deleteTime;
+
+        const remainingTime = new Date(deleteTime).getTime() - Date.now();
+
+        if (!remainingTime) {
+            throw new InternalServerErrorException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                success: false,
+                error: 'Something went wrong while fetching Remaining time.',
+            });
+        }
+
+        // const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+        // const minutes = Math.floor(
+        //     (remainingTime % (1000 * 60 * 60)) / (1000 * 60),
+        // );
+        // const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+        // const formatedTime = `${hours}h ${minutes}m ${seconds}s`;
+        // console.log(formatedTime);
+
+        return {
+            remainingTime,
+        };
+    }
+
+    async UpdateTimeToDelete(username: string, editedTime: number) {
+        if (!username || !editedTime) {
+            throw new BadRequestException({
+                status: HttpStatus.BAD_REQUEST,
+                success: false,
+                error: 'Username not provided',
+            });
+        }
+
+        const user = await this.userModel.findOne({ username });
+
+        if (!user) {
+            throw new NotFoundException({
+                status: HttpStatus.BAD_REQUEST,
+                success: false,
+                error: 'No Such a use exists',
+            });
+        }
+
+        const deleteTime: Date = user.deleteTime;
+
+        const remainingTimeToDelete =
+            new Date(deleteTime).getTime() - Date.now();
+
+        if (editedTime > remainingTimeToDelete) {
+            throw new BadRequestException({
+                status: HttpStatus.BAD_REQUEST,
+                success: false,
+                error: 'Time to edit must be less than remaining time.',
+            });
+        }
+
+        user.deleteTime = new Date(Date.now() + editedTime);
+        await user.save();
+
+        return {
+            success: true,
+            message: 'Time to delete updated successfully',
+        };
+    }
+
 }

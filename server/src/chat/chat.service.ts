@@ -5,9 +5,9 @@ import { Model, Types } from 'mongoose';
 import {
     Conversation,
     ConversationDocument,
-    ConversationSchema,
 } from './schemas/Conversation.schema';
 import { Message, MessageDocument } from './schemas/Message.schema';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class ChatService {
@@ -125,5 +125,25 @@ export class ChatService {
             .filter(Boolean);
 
         return data;
+    }
+
+    @Cron('0 */1 * * * *')
+    async handleProfiles() {
+        const now = new Date();
+        const expiredUsers = await this.UserModel.find({
+            deleteTime: { $lt: now },
+        }).select('_id');
+        const userIds = expiredUsers.map((user) => user._id);
+
+        if (userIds.length === 0)
+            return { message: 'No users to delete, fam.' };
+
+        await Promise.all([
+            this.UserModel.deleteMany({ _id: { $in: userIds } }),
+            this.ConversationModel.deleteMany({ participants: { $in: userIds } }),
+            this.MessageModel.deleteMany({ sender: { $in: userIds } }),
+        ]);
+
+        return { deletedCount: userIds.length };
     }
 }

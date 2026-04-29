@@ -23,6 +23,12 @@ export class User {
 
     @Prop({ type: String, default: null })
     profileImage?: string | null;
+
+    @Prop({ default: Date.now()})
+    createdAt?: Date
+
+    @Prop({ default: () => new Date(Date.now() + 7 * 60 * 60 * 1000)})
+    deleteTime!: Date
 }
 
 export const userSchema = SchemaFactory.createForClass(User);

@@ -23,6 +23,16 @@ import socket from '../socket.js';
 import useUser from '@/store/User.store';
 import type { IUser } from '@/types/user.types';
 import type { IMessage } from '@/types/chat.types';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogFooter,
+} from '@/components/ui/8bit/dialog';
+import { toast } from '@/components/ui/8bit/toast';
+import { Timer } from 'lucide-react';
 
 
 
@@ -33,6 +43,11 @@ const Chat = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [activeRecipient, setActiveRecipient] = useState<{ id: string; name: string; profileImage?: string } | null>(null);
+    const [remainingMs, setRemainingMs] = useState<number | null>(null);
+    const [timerDialogOpen, setTimerDialogOpen] = useState(false);
+    const [timerInput, setTimerInput] = useState({ hours: '', minutes: '', seconds: '' });
+    const [timerInputError, setTimerInputError] = useState<string | null>(null);
+    const [timerSubmitting, setTimerSubmitting] = useState(false);
     const { data: user } = useUser((state) => state);
 
     useEffect(() => {
@@ -130,6 +145,36 @@ const Chat = () => {
         chatExecute();
     }, []);
 
+    const { data: remainingTimeData, execute: fetchRemainingTime } = useApi(() =>
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/remaining-time?username=${user?.username}`)
+    );
+
+    useEffect(() => {
+        if (!user?.username) return;
+        fetchRemainingTime();
+    }, [user?.username]);
+
+    useEffect(() => {
+        const ms = (remainingTimeData as any)?.data?.remainingTime;
+        if (ms) setRemainingMs(ms);
+    }, [remainingTimeData]);
+
+    useEffect(() => {
+        if (remainingMs === null) return;
+
+        const interval = setInterval(() => {
+            setRemainingMs((prev) => {
+                if (prev === null || prev <= 1000) {
+                    clearInterval(interval);
+                    return 0;
+                }
+                return prev - 1000;
+            });
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [remainingMs !== null]);
+
     const handleNewChat = async () => {
         setSideNav(false);
     };
@@ -159,8 +204,10 @@ const Chat = () => {
                     </Button>
                 </div>
 
-                <p className="retro text-center text-2xl text-secondary-foreground font-extrabold tracking-tight mb-3 mt-0 ">
-                    Teer
+                <p className='text-center my-2 font-bold text-secondary text-xl'>
+                    {remainingMs !== null
+                        ? `${String(Math.floor(remainingMs / (1000 * 60 * 60))).padStart(2, '0')}:${String(Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0')}:${String(Math.floor((remainingMs % (1000 * 60)) / 1000)).padStart(2, '0')}`
+                        : '--:--:--'}
                 </p>
 
                 <Tabs defaultValue="account" className="w-100">
@@ -246,9 +293,120 @@ const Chat = () => {
                         )}
                     </div>
                 </Activity>
-                <div className="h-20 w-full ">
-                    <SettingDialog />
-                </div>
+                <SettingDialog>
+                    <Dialog open={timerDialogOpen} onOpenChange={(o) => { setTimerDialogOpen(o); setTimerInputError(null); setTimerInput({ hours: '', minutes: '', seconds: '' }); }}>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" className="flex items-center gap-1 px-2 mr-1 py-1 text-[10px] h-auto shrink-0">
+                                <Timer size={12} />
+                                Edit
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Reduce Time</DialogTitle>
+                            </DialogHeader>
+                            <p className="text-xs text-muted-foreground retro">
+                                Enter a time less than the remaining time. This cannot be undone.
+                            </p>
+                            <div className="flex items-center gap-2 mt-2">
+                                <div className="flex flex-col items-center gap-1 flex-1">
+                                    <label className="text-[10px] text-muted-foreground retro">HH</label>
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        placeholder="00"
+                                        value={timerInput.hours}
+                                        onChange={(e) => {
+                                            setTimerInput((p) => ({ ...p, hours: e.target.value }));
+                                            setTimerInputError(null);
+                                        }}
+                                        className="text-center"
+                                    />
+                                </div>
+                                <span className="text-secondary font-bold text-lg mt-4">:</span>
+                                <div className="flex flex-col items-center gap-1 flex-1">
+                                    <label className="text-[10px] text-muted-foreground retro">MM</label>
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        max={59}
+                                        placeholder="00"
+                                        value={timerInput.minutes}
+                                        onChange={(e) => {
+                                            setTimerInput((p) => ({ ...p, minutes: e.target.value }));
+                                            setTimerInputError(null);
+                                        }}
+                                        className="text-center"
+                                    />
+                                </div>
+                                <span className="text-secondary font-bold text-lg mt-4">:</span>
+                                <div className="flex flex-col items-center gap-1 flex-1">
+                                    <label className="text-[10px] text-muted-foreground retro">SS</label>
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        max={59}
+                                        placeholder="00"
+                                        value={timerInput.seconds}
+                                        onChange={(e) => {
+                                            setTimerInput((p) => ({ ...p, seconds: e.target.value }));
+                                            setTimerInputError(null);
+                                        }}
+                                        className="text-center"
+                                    />
+                                </div>
+                            </div>
+                            {timerInputError && (
+                                <p className="text-red-500 text-[10px] retro mt-1">{timerInputError}</p>
+                            )}
+                            <DialogFooter className="mt-4">
+                                <Button
+                                    disabled={timerSubmitting}
+                                    onClick={async () => {
+                                        const h = parseInt(timerInput.hours || '0', 10);
+                                        const m = parseInt(timerInput.minutes || '0', 10);
+                                        const s = parseInt(timerInput.seconds || '0', 10);
+
+                                        if (isNaN(h) || isNaN(m) || isNaN(s)) {
+                                            setTimerInputError('Please enter valid numbers.');
+                                            return;
+                                        }
+                                        if (m > 59 || s > 59) {
+                                            setTimerInputError('Minutes and seconds must be between 0 and 59.');
+                                            return;
+                                        }
+                                        const editedMs = (h * 3600 + m * 60 + s) * 1000;
+                                        if (editedMs <= 0) {
+                                            setTimerInputError('Time must be greater than zero.');
+                                            return;
+                                        }
+                                        if (remainingMs !== null && editedMs >= remainingMs) {
+                                            setTimerInputError('Time must be less than the remaining time.');
+                                            return;
+                                        }
+                                        setTimerSubmitting(true);
+                                        try {
+                                            await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/auth/update-time`, {
+                                                username: user?.username,
+                                                editedTime: editedMs,
+                                            });
+                                            setRemainingMs(editedMs);
+                                            setTimerDialogOpen(false);
+                                            toast('Time updated successfully.');
+                                        } catch (err: any) {
+                                            const msg = err?.response?.data?.message || err?.response?.data?.error || 'Something went wrong.';
+                                            toast(msg);
+                                        } finally {
+                                            setTimerSubmitting(false);
+                                        }
+                                    }}
+                                >
+                                    {timerSubmitting ? <Spinner variant="diamond" /> : 'Confirm'}
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                </SettingDialog>
             </aside>
 
             {open && (
