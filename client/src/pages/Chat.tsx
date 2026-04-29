@@ -33,6 +33,7 @@ const Chat = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [activeRecipient, setActiveRecipient] = useState<{ id: string; name: string; profileImage?: string } | null>(null);
+    const [remainingMs, setRemainingMs] = useState<number | null>(null);
     const { data: user } = useUser((state) => state);
 
     useEffect(() => {
@@ -130,6 +131,36 @@ const Chat = () => {
         chatExecute();
     }, []);
 
+    const { data: remainingTimeData, execute: fetchRemainingTime } = useApi(() =>
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/remaining-time?username=${user?.username}`)
+    );
+
+    useEffect(() => {
+        if (!user?.username) return;
+        fetchRemainingTime();
+    }, [user?.username]);
+
+    useEffect(() => {
+        const ms = (remainingTimeData as any)?.data?.remainingTime;
+        if (ms) setRemainingMs(ms);
+    }, [remainingTimeData]);
+
+    useEffect(() => {
+        if (remainingMs === null) return;
+
+        const interval = setInterval(() => {
+            setRemainingMs((prev) => {
+                if (prev === null || prev <= 1000) {
+                    clearInterval(interval);
+                    return 0;
+                }
+                return prev - 1000;
+            });
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [remainingMs !== null]);
+
     const handleNewChat = async () => {
         setSideNav(false);
     };
@@ -159,8 +190,10 @@ const Chat = () => {
                     </Button>
                 </div>
 
-                <p className="retro text-center text-2xl text-secondary-foreground font-extrabold tracking-tight mb-3 mt-0 ">
-                    Teer
+                <p className='text-center my-2 font-bold text-secondary text-xl'>
+                    {remainingMs !== null
+                        ? `${String(Math.floor(remainingMs / (1000 * 60 * 60))).padStart(2, '0')}:${String(Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0')}:${String(Math.floor((remainingMs % (1000 * 60)) / 1000)).padStart(2, '0')}`
+                        : '--:--:--'}
                 </p>
 
                 <Tabs defaultValue="account" className="w-100">

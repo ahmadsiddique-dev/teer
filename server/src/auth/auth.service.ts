@@ -15,8 +15,6 @@ import { JwtService } from '@nestjs/jwt';
 import { v2 as cloudinary } from 'cloudinary';
 import * as streamifier from 'streamifier';
 import * as bcrypt from 'bcryptjs';
-import { Cron } from '@nestjs/schedule';
-import dayjs from 'dayjs';
 
 @Injectable()
 export class AuthService {
@@ -326,17 +324,16 @@ export class AuthService {
             });
         }
 
-        const hours = Math.floor(remainingTime / (1000 * 60 * 60));
-        const minutes = Math.floor(
-            (remainingTime % (1000 * 60 * 60)) / (1000 * 60),
-        );
-        const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+        // const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+        // const minutes = Math.floor(
+        //     (remainingTime % (1000 * 60 * 60)) / (1000 * 60),
+        // );
+        // const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
 
-        const formatedTime = `${hours}h ${minutes}m ${seconds}s`;
-        console.log(formatedTime);
+        // const formatedTime = `${hours}h ${minutes}m ${seconds}s`;
+        // console.log(formatedTime);
 
         return {
-            formatedTime,
             remainingTime,
         };
     }
