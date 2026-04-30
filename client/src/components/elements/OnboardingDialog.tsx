@@ -12,12 +12,12 @@ const SLIDES = [
     {
         icon: <GameController size={40} weight="fill" />,
         title: 'Welcome to TEER',
-        body: 'TEER is an anonymous chat application. Every account you create comes with a countdown timer — when it hits zero, your account and all your messages vanish forever.',
+        body: 'TEER is an anonymous chat application. Every account you create comes with a countdown timer. when it hits zero, your account and all your messages vanish forever.',
     },
     {
         icon: <Hourglass size={40} weight="fill" />,
         title: 'Your Clock is Ticking',
-        body: 'From the moment you register, a countdown begins. You can see your remaining time in the sidebar. You can reduce it further — but you can never add more time back.',
+        body: 'From the moment you register, a countdown begins. You can see your remaining time in the sidebar. You can reduce it further but you can never add more time back.',
     },
     {
         icon: <ChatTeardrop size={40} weight="fill" />,
@@ -27,12 +27,12 @@ const SLIDES = [
     {
         icon: <Skull size={40} weight="fill" />,
         title: 'Your Data, Gone Forever',
-        body: "When your timer runs out, everything is deleted automatically — your profile, conversations, and messages. No trace left behind. That's the whole point.",
+        body: "When your timer runs out, everything is deleted automatically your profile, conversations, and messages. No trace left behind. That's the whole point.",
     },
     {
         icon: <Flag size={40} weight="fill" />,
-        title: "You're Ready",
-        body: "Create an account, start chatting, and enjoy your limited time. Make it count.",
+        title: "Are you ready?",
+        body: "Create an account, start chatting, and enjoy your limited time. btw if you don't want your account to be delted you pay me $342,242/month",
     },
 ];
 
