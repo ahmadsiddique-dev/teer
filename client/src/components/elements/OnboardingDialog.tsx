@@ -21,7 +21,7 @@ const SLIDES = [
     },
     {
         icon: <ChatTeardrop size={40} weight="fill" />,
-        title: 'Chat Anonymously',
+        title: 'Enjoye Themes',
         body: 'There are many different themes that you can enjoy and can select one you like. btw my personal favourite is Zelda',
     },
     {
