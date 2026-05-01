@@ -42,6 +42,9 @@ const Register = () => {
         paraphrase: string;
     };
 
+    useEffect(() => {
+        toast("Reviewer! Please show some mercy I have already gotten so bad reviews")
+    })
     const {
         register,
         handleSubmit,
